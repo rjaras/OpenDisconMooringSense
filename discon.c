@@ -1,16 +1,16 @@
-#define NINT(a) ((a) >= 0.0 ? (int) ((a)+0.5) : ((a)-0.5)
+#define NINT(a) ((a) >= 0.0 ? (int) ((a)+0.5) : ((a)-0.5))
 
 #include "ikVpvsController.h"
-#include CONTROLLER_CONFIGURATION
+#include "ikDisconConfig.h"
+#include "ikDiscon_EXPORT.h"
 
 void ikDiscon_EXPORT DISCON(float *DATA, int FLAG, const char *INFILE, const char *OUTNAME, char *MESSAGE) {
 	int err;
-	int status;
 	ikVpvsController con;
 	ikVpvsControllerParams param;
 		
 	if (NINT(DATA[0]) == 0) {
-		setParams(&param);
+//		setParams(&param);
 		err = ikVpvsController_init(&con, &param);
 	}
 	
