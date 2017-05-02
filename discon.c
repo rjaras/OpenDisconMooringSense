@@ -6,10 +6,11 @@
 
 void ikDiscon_EXPORT DISCON(float *DATA, int FLAG, const char *INFILE, const char *OUTNAME, char *MESSAGE) {
 	int err;
-	ikVpvsController con;
-	ikVpvsControllerParams param;
+	static ikVpvsController con;
+	static ikVpvsControllerParams param;
 		
 	if (NINT(DATA[0]) == 0) {
+		ikVpvsController_initParams(&param);
 //		setParams(&param);
 		err = ikVpvsController_init(&con, &param);
 	}
