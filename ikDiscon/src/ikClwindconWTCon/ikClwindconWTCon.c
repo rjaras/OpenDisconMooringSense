@@ -22,20 +22,25 @@
 
 int ikClwindconWTCon_init(ikClwindconWTCon *self, const ikClwindconWTConParams *params) {
     int err;
+	ikClwindconWTConParams params_ = params;
+	
+	// pass reference to collective pitch demand for use in gain scheduling
+	params_->collectivePitchControl.linearController.gainShedXVal = &(self->priv.collectivePitchDemand);
 
     // pass on the member parameters
-    err = ikConLoop_init(&(self->priv.dtdamper), &(params->drivetrainDamper));
+    err = ikConLoop_init(&(self->priv.dtdamper), &(params_->drivetrainDamper));
     if (err) return -1;
-    err = ikConLoop_init(&(self->priv.torquecon), &(params->torqueControl));
+    err = ikConLoop_init(&(self->priv.torquecon), &(params_->torqueControl));
     if (err) return -2;
-    err = ikConLoop_init(&(self->priv.colpitchcon), &(params->collectivePitchControl));
+    err = ikConLoop_init(&(self->priv.colpitchcon), &(params_->collectivePitchControl));
     if (err) return -3;
-    err = ikTpman_init(&(self->priv.tpManager), &(params->torquePitchManager));
+    err = ikTpman_init(&(self->priv.tpManager), &(params_->torquePitchManager));
     if (err) return -5;
     
     // initialise feedback signals
     self->priv.torqueFromTorqueCon = 0.0;
     self->priv.collectivePitchFromPitchControl = 0.0;
+	self->priv.collectivePitchDemand = 0.0;
 
     return 0;
 }
