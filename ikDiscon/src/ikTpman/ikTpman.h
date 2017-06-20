@@ -23,7 +23,7 @@
 extern "C" {
 #endif
     
-#include "../ikLutbl/ikLutbl.h"
+#include "ikLutbl.h"
     
     /**
      * @struct ikTpman

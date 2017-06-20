@@ -6,11 +6,19 @@ set (ikDiscon_VERSION_MAJOR 0)
 set (ikDiscon_VERSION_MINOR 0)
 
 # Include directories
-include_directories ("${PROJECT_SOURCE_DIR}")
-include_directories ("${PROJECT_BINARY_DIR}")
+set (IKDISCON_INCLUDE_DIRS ${IKDISCON_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/include/)
+set (IKDISCON_INCLUDE_DIRS ${IKDISCON_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/src/ikClwindconWTCon/)
+set (IKDISCON_INCLUDE_DIRS ${IKDISCON_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/src/ikClwindconWTConfig/)
+set (IKDISCON_INCLUDE_DIRS ${IKDISCON_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/src/ikPowman/)
+set (IKDISCON_INCLUDE_DIRS ${IKDISCON_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/src/ikTpman/)
+include_directories ("${IKDISCON_INCLUDE_DIRS}")
 
 # ikDiscon source files
-set (IKDISCON_SOURCES ${IKDISCON_SOURCES} ${PROJECT_SOURCE_DIR}/discon.c)
+set (IKDISCON_SOURCES ${IKDISCON_SOURCES} ${PROJECT_SOURCE_DIR}/src/ikTpman/ikTpman.c)
+set (IKDISCON_SOURCES ${IKDISCON_SOURCES} ${PROJECT_SOURCE_DIR}/src/ikPowman/ikPowman.c)
+set (IKDISCON_SOURCES ${IKDISCON_SOURCES} ${PROJECT_SOURCE_DIR}/src/ikClwindconWTConfig/ikClwindconWTConfig.c)
+set (IKDISCON_SOURCES ${IKDISCON_SOURCES} ${PROJECT_SOURCE_DIR}/src/ikClwindconWTCon/ikClwindconWTCon.c)
+set (IKDISCON_SOURCES ${IKDISCON_SOURCES} ${PROJECT_SOURCE_DIR}/src/discon/discon.c)
 
 # shared ikDiscon library
 include (GenerateExportHeader)

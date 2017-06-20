@@ -22,19 +22,19 @@
 
 int ikClwindconWTCon_init(ikClwindconWTCon *self, const ikClwindconWTConParams *params) {
     int err;
-	ikClwindconWTConParams params_ = params;
+	ikClwindconWTConParams params_ = *params;
 	
 	// pass reference to collective pitch demand for use in gain scheduling
-	params_->collectivePitchControl.linearController.gainShedXVal = &(self->priv.collectivePitchDemand);
+	params_.collectivePitchControl.linearController.gainShedXVal = &(self->priv.collectivePitchDemand);
 
     // pass on the member parameters
-    err = ikConLoop_init(&(self->priv.dtdamper), &(params_->drivetrainDamper));
+    err = ikConLoop_init(&(self->priv.dtdamper), &(params_.drivetrainDamper));
     if (err) return -1;
-    err = ikConLoop_init(&(self->priv.torquecon), &(params_->torqueControl));
+    err = ikConLoop_init(&(self->priv.torquecon), &(params_.torqueControl));
     if (err) return -2;
-    err = ikConLoop_init(&(self->priv.colpitchcon), &(params_->collectivePitchControl));
+    err = ikConLoop_init(&(self->priv.colpitchcon), &(params_.collectivePitchControl));
     if (err) return -3;
-    err = ikTpman_init(&(self->priv.tpManager), &(params_->torquePitchManager));
+    err = ikTpman_init(&(self->priv.tpManager), &(params_.torquePitchManager));
     if (err) return -5;
     
     // initialise feedback signals
@@ -89,7 +89,7 @@ int ikClwindconWTCon_step(ikClwindconWTCon *self) {
 
 int ikClwindconWTCon_getOutput(const ikClwindconWTCon *self, double *output, const char *name) {
     int err;
-    char *sep;
+    const char *sep;
     
 	// pick up the signal names
     if (!strcmp(name, "torque demand from torque control")) {
@@ -129,27 +129,27 @@ int ikClwindconWTCon_getOutput(const ikClwindconWTCon *self, double *output, con
     sep = strstr(name, ">");
     if (NULL == sep) return -1;
 	if (!strncmp(name, "power manager", strlen(name) - strlen(sep))) {
-        err = ikStpgen_getOutput(&(self->powerManager), output, sep + 1);
+        err = ikPowman_getOutput(&(self->priv.powerManager), output, sep + 1);
         if (err) return -1;
         else return 0;
     }
 	if (!strncmp(name, "torque-pitch manager", strlen(name) - strlen(sep))) {
-        err = ikStpgen_getOutput(&(self->tpManager), output, sep + 1);
+        err = ikTpman_getOutput(&(self->priv.tpManager), output, sep + 1);
         if (err) return -1;
         else return 0;
     }
 	if (!strncmp(name, "drivetrain damper", strlen(name) - strlen(sep))) {
-        err = ikStpgen_getOutput(&(self->dtdamper), output, sep + 1);
+        err = ikConLoop_getOutput(&(self->priv.dtdamper), output, sep + 1);
         if (err) return -1;
         else return 0;
     }
 	if (!strncmp(name, "torque control", strlen(name) - strlen(sep))) {
-        err = ikStpgen_getOutput(&(self->torquecon), output, sep + 1);
+        err = ikConLoop_getOutput(&(self->priv.torquecon), output, sep + 1);
         if (err) return -1;
         else return 0;
     }
 	if (!strncmp(name, "collective pitch control", strlen(name) - strlen(sep))) {
-        err = ikStpgen_getOutput(&(self->colpitchcon), output, sep + 1);
+        err = ikConLoop_getOutput(&(self->priv.colpitchcon), output, sep + 1);
         if (err) return -1;
         else return 0;
     }

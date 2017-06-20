@@ -31,8 +31,6 @@ extern "C" {
 	
 	void ikTuneOptimumTorqueCurve(ikConLoopParams *params);
 	
-	void ikTunePitchPI(ikConLoopParams *params);
-	
 	void ikTunePitchLowpassFilter(ikConLoopParams *params, double T);
 	
 	void ikTunePitchNotches(ikConLoopParams *params, double T);
@@ -44,6 +42,8 @@ extern "C" {
 	void ikTuneTorqueNotches(ikConLoopParams *params, double T);
 	
 	void ikTuneTorquePI(ikConLoopParams *params, double T);
+
+	void ikTunePitchPIGainSchedule(ikConLoopParams *params);
 
 #ifdef __cplusplus
 }

@@ -19,18 +19,17 @@
 #include "ikClwindconWTConfig.h"  
 
 void setParams(ikClwindconWTConParams *param) {
-	int err;
 	double T = 0.01;
 	
-	ikTuneDrivetrainDamper(&(param->dtdamper), T);
-	ikTuneOptimumTorqueCurve(&(param->torquecon));
-	ikTunePitchPIGainSchedule(&(param->colpitchcon));
-	ikTunePitchLowpassFilter(&(param->colpitchcon), T);
-	ikTunePitchNotches(&(param->colpitchcon), T);
-	ikTunePitchPI(&(param->colpitchcon), T);
-	ikTuneTorqueLowpassFilter(&(param->torquecon), T);
-	ikTuneTorqueNotches(&(param->torquecon), T);
-	ikTuneTorquePI(&(param->torquecon), T);
+	ikTuneDrivetrainDamper(&(param->drivetrainDamper), T);
+	ikTuneOptimumTorqueCurve(&(param->torqueControl));
+	ikTunePitchPIGainSchedule(&(param->collectivePitchControl));
+	ikTunePitchLowpassFilter(&(param->collectivePitchControl), T);
+	ikTunePitchNotches(&(param->collectivePitchControl), T);
+	ikTunePitchPI(&(param->collectivePitchControl), T);
+	ikTuneTorqueLowpassFilter(&(param->torqueControl), T);
+	ikTuneTorqueNotches(&(param->torqueControl), T);
+	ikTuneTorquePI(&(param->torqueControl), T);
 	
 }
 
@@ -62,16 +61,17 @@ void ikTuneDrivetrainDamper(ikConLoopParams *params, double T) {
     params->linearController.errorTfs.tfParams[0].b[0] = 1.0;
     params->linearController.errorTfs.tfParams[0].b[1] = 0.0;
     params->linearController.errorTfs.tfParams[0].b[2] = -1.0;
-    params->linearController.errorTfs.tfParams[0].a[0] = 1 + T*d*w + T^2*w^2/4;
-    params->linearController.errorTfs.tfParams[0].a[1] = -2*(1 - T^2*w^2/4);
-    params->linearController.errorTfs.tfParams[0].a[2] = (1 - T*d*w + T^2*w^2/4);
+    params->linearController.errorTfs.tfParams[0].a[0] = 1.0 + T*d*w + T*T*w*w/4.0;
+    params->linearController.errorTfs.tfParams[0].a[1] = -2.0*(1.0 - T*T*w*w/4.0);
+    params->linearController.errorTfs.tfParams[0].a[2] = (1.0 - T*d*w + T*T*w*w/4.0);
     params->linearController.errorTfs.tfParams[1].enable = 1;
-    params->linearController.errorTfs.tfParams[1].b[0] = G*T/2*w^2;    
+    params->linearController.errorTfs.tfParams[1].b[0] = G*T/2.0*w*w;    
     
 }
 
 void ikTuneOptimumTorqueCurve(ikConLoopParams *params) {    
-    
+    int i;
+
     // implement variable speed at low wind speeds via an optimum torque look-up table.
     // Kopt = 97.0819 Nms^2/rad^2
     params->setpointGenerator.nzones = 1;
@@ -172,9 +172,9 @@ void ikTunePitchNotches(ikConLoopParams *params, double T) {
     //  The sampling time is given by function parameter T.
     //
     // Set parameters here:
-    w = 1.59; // [rad/s]
-    dnum = 0.01; // [-]
-    dden = 0.2; // [-]
+    double w = 1.59; // [rad/s]
+    double dnum = 0.01; // [-]
+    double dden = 0.2; // [-]
     //
     //####################################################################
     
@@ -272,9 +272,9 @@ void ikTuneTorqueNotches(ikConLoopParams *params, double T) {
     //  The sampling time is given by function parameter T.
     //
     // Set parameters here:
-    w = 1.59; // [rad/s]
-    dnum = 0.01; // [-]
-    dden = 0.2; // [-]
+    double w = 1.59; // [rad/s]
+    double dnum = 0.01; // [-]
+    double dden = 0.2; // [-]
     //
     //####################################################################
     
