@@ -90,7 +90,8 @@ int ikClwindconWTCon_step(ikClwindconWTCon *self) {
 int ikClwindconWTCon_getOutput(const ikClwindconWTCon *self, double *output, const char *name) {
     int err;
     char *sep;
-    // pick up the signal names
+    
+	// pick up the signal names
     if (!strcmp(name, "torque demand from torque control")) {
         *output = self->priv.torqueFromTorqueCon;
         return 0;
@@ -127,6 +128,31 @@ int ikClwindconWTCon_getOutput(const ikClwindconWTCon *self, double *output, con
     // pick up the block names
     sep = strstr(name, ">");
     if (NULL == sep) return -1;
+	if (!strncmp(name, "power manager", strlen(name) - strlen(sep))) {
+        err = ikStpgen_getOutput(&(self->powerManager), output, sep + 1);
+        if (err) return -1;
+        else return 0;
+    }
+	if (!strncmp(name, "torque-pitch manager", strlen(name) - strlen(sep))) {
+        err = ikStpgen_getOutput(&(self->tpManager), output, sep + 1);
+        if (err) return -1;
+        else return 0;
+    }
+	if (!strncmp(name, "drivetrain damper", strlen(name) - strlen(sep))) {
+        err = ikStpgen_getOutput(&(self->dtdamper), output, sep + 1);
+        if (err) return -1;
+        else return 0;
+    }
+	if (!strncmp(name, "torque control", strlen(name) - strlen(sep))) {
+        err = ikStpgen_getOutput(&(self->torquecon), output, sep + 1);
+        if (err) return -1;
+        else return 0;
+    }
+	if (!strncmp(name, "collective pitch control", strlen(name) - strlen(sep))) {
+        err = ikStpgen_getOutput(&(self->colpitchcon), output, sep + 1);
+        if (err) return -1;
+        else return 0;
+    }
 
 
     return -2;
