@@ -32,12 +32,13 @@ extern "C" {
      * @brief controller inputs
      */
     typedef struct ikClwindconWTConInputs {
-        double pitchBlade1; /**<blade 1 pitch angle in degrees*/
-        double pitchBlade2; /**<blade 2 pitch angle in degrees*/
-        double pitchBlade3; /**<blade 3 pitch angle in degrees*/
-        double generatorTorque; /**<generator torque in kNm*/
-        double generatorSpeed; /**<generator speed in rad/s*/
+        double externalMaximumTorque; /**<external maximum torque in kNm*/
+        double externalMinimumTorque; /**<external minimum torque in kNm*/
+        double externalMaximumPitch; /**<external maximum pitch in degrees*/
+        double externalMinimumPitch; /**<external minimum pitch in degrees*/
         double maximumPower; /**<maximum power setpoint in kW*/
+        double maximumSpeed; /**<maximum generator speed setpoing in rad/s*/
+        double generatorSpeed; /**<generator speed in rad/s*/
     } ikClwindconWTConInputs;
 
     /**
@@ -60,19 +61,15 @@ extern "C" {
         ikConLoop dtdamper;
         ikConLoop torquecon;
         ikConLoop colpitchcon;
-        double collectivePitch;
         double maxPitch;
         double minPitch;
         double maxSpeed;
         double maxTorqueFromPowerMan;
         double maxTorque;
         int tpManState;
-        double maxPitchFromSpeed;
-        double minPitchFromSpeed;
         double minTorque;
         double torqueFromDtdamper;
         double torqueFromTorqueCon;
-        double collectivePitchFromPitchControl;
         double collectivePitchDemand;
     } ikClwindconWTConPrivate;
     // @endcond
@@ -81,18 +78,16 @@ extern "C" {
      * @struct ikClwindconWTCon
      * @brief Main controller class
      * 
-     * Instances of this type are variable pitch, variable speed wind turbine
-     * controllers, which take generator speed and power measurements, as well
-     * as measurements from other turbine sensors, and produce generator torque
-     * and blade pitch demands.
+     * This is and ad hoc wind turbine controller for CL-Windcon.
      * 
      * @par Inputs
-     * @li pitch angle at blade 1: current pitch angle at blade 1, specify via @link ikClwindconWTConInputs.pitchBlade1 @endlink at @link in @endlink
-     * @li pitch angle at blade 2: current pitch angle at blade 2, specify via @link ikClwindconWTConInputs.pitchBlade2 @endlink at @link in @endlink
-     * @li pitch angle at blade 3: current pitch angle at blade 3, specify via @link ikClwindconWTConInputs.pitchBlade3 @endlink at @link in @endlink
-     * @li generator torque: current generator torque, specify via @link ikClwindconWTConInputs.generatorTorque @endlink at @link in @endlink
-     * @li generator speed: current generator speed, specify via @link ikClwindconWTConInputs.generatorSpeed @endlink at @link in @endlink
+	 * @li external maximum torque: externally set upper torque limit, specify via @link ikClwindconWTConInputs.externalMaximumTorque @endlink at @link in @endlink
+	 * @li external minimum torque: externally set lower torque limit, specify via @link ikClwindconWTConInputs.externalMinimumTorque @endlink at @link in @endlink
+	 * @li external maximum pitch: externally set upper pitch limit, specify via @link ikClwindconWTConInputs.externalMaximumPitch @endlink at @link in @endlink
+	 * @li external minimum pitch: externally set lower pitch limit, specify via @link ikClwindconWTConInputs.externalMinimumPitch @endlink at @link in @endlink
      * @li maximum power: maximum power setpoint, specify via @link ikClwindconWTConInputs.maximumPower @endlink at @link in @endlink
+     * @li maximum speed: maximum generator speed setpoint, specify via @link ikClwindconWTConInputs.maximumSpeed @endlink at @link in @endlink
+     * @li generator speed: current generator speed, specify via @link ikClwindconWTConInputs.generatorSpeed @endlink at @link in @endlink
      * 
      * @par Outputs
      * @li torque demand: in kNm, get via @link ikClwindconWTConOutputs.torqueDemand @endlink at @link out @endlink
@@ -164,7 +159,9 @@ extern "C" {
     /**
      * Execute periodic calculations
      * @param self controller instance
-     * @return status
+     * @return state
+	 * @li 0: below rated
+	 * @li 1: above rated
      */
     int ikClwindconWTCon_step(ikClwindconWTCon *self);
 

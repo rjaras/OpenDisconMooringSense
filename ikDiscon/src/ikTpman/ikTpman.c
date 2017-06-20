@@ -37,13 +37,12 @@ void ikTpman_initParams(ikTpmanParams *params) {
     params->minPitchTbl = NULL;
 }
 
-int ikTpman_step(ikTpman *self, double torque, double maxTorque, double minTorqueExt, double pitchSpeed, double pitchPlatform, double maxPitch, double minPitchExt) {
+int ikTpman_step(ikTpman *self, double torque, double maxTorque, double minTorqueExt, double pitch, double maxPitchExt, double minPitchExt) {
     // save inputs
-    self->maxPitch = maxPitch;
+    self->maxPitchExt = maxPitchExt;
     self->minPitchExt = minPitchExt;
     self->torque = torque;
-    self->pitchSpeed = pitchSpeed;
-    self->pitchPlatform = pitchPlatform;
+    self->pitch = pitch;
     self->minTorqueExt = minTorqueExt;
     self->maxTorque = maxTorque;
 
@@ -55,30 +54,26 @@ int ikTpman_step(ikTpman *self, double torque, double maxTorque, double minTorqu
         self->minPitch = minPitchExt;
     }
 
-    // calculate limits for pitch from platform
-    self->minPitchPltfrm = self->minPitch - pitchSpeed;
-    self->maxPitchPltfrm = maxPitch - pitchSpeed;
-
     // transition between states if necessary
     switch (self->state) {
         case 0:
-            if ((torque >= maxTorque) || (pitchSpeed + pitchPlatform > self->minPitch)) self->state = 1;
+            if ((torque >= maxTorque) || (pitch > self->minPitch)) self->state = 1;
             break;
         case 1:
-            if (pitchSpeed + pitchPlatform <= self->minPitch) self->state = 0;
+            if (pitch <= self->minPitch) self->state = 0;
             break;
     }
 
     // calculate limits depending on state
     switch (self->state) {
         case 0:
-            self->maxPitchSpeed = pitchSpeed;
-            self->maxPitchSpeed = self->maxPitchSpeed < maxPitch ? self->maxPitchSpeed : maxPitch;
-            self->maxPitchSpeed = self->maxPitchSpeed > self->minPitch ? self->maxPitchSpeed : self->minPitch;
+            self->maxPitch = pitch;
+            self->maxPitch = self->maxPitch < maxPitchExt ? self->maxPitch : maxPitchExt;
+            self->maxPitch = self->maxPitch > self->minPitch ? self->maxPitch : self->minPitch;
             self->minTorque = minTorqueExt;
             break;
         case 1:
-            self->maxPitchSpeed = maxPitch;
+            self->maxPitch = maxPitchExt;
             self->minTorque = torque;
             self->minTorque = self->minTorque < maxTorque ? self->minTorque : maxTorque;
             self->minTorque = self->minTorque > minTorqueExt ? self->minTorque : minTorqueExt;
@@ -96,24 +91,16 @@ int ikTpman_getOutput(const ikTpman *self, double *output, const char *name) {
         *output = self->minPitch;
         return 0;
     }
-    if (!strcmp(name, "minimum pitch from platform")) {
-        *output = self->minPitchPltfrm;
-        return 0;
-    }
-    if (!strcmp(name, "maximum pitch from platform")) {
-        *output = self->maxPitchPltfrm;
-        return 0;
-    }
-    if (!strcmp(name, "maximum pitch from speed")) {
-        *output = self->maxPitchSpeed;
+    if (!strcmp(name, "maximum pitch")) {
+        *output = self->maxPitch;
         return 0;
     }
     if (!strcmp(name, "minimum torque")) {
         *output = self->minTorque;
         return 0;
     }
-    if (!strcmp(name, "maximum pitch")) {
-        *output = self->maxPitch;
+    if (!strcmp(name, "external maximum pitch")) {
+        *output = self->maxPitchExt;
         return 0;
     }
     if (!strcmp(name, "external minimum pitch")) {
@@ -124,12 +111,8 @@ int ikTpman_getOutput(const ikTpman *self, double *output, const char *name) {
         *output = self->torque;
         return 0;
     }
-    if (!strcmp(name, "pitch from speed")) {
-        *output = self->pitchSpeed;
-        return 0;
-    }
-    if (!strcmp(name, "pitch from platform")) {
-        *output = self->pitchPlatform;
+    if (!strcmp(name, "pitch")) {
+        *output = self->pitch;
         return 0;
     }
     if (!strcmp(name, "external minimum torque")) {

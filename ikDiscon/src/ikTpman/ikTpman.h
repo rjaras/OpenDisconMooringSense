@@ -29,26 +29,19 @@ extern "C" {
      * @struct ikTpman
      * @brief Torque-pitch manager
      * 
-     * Instances of this type are torque-pitch managers of the sort used in
-     * pitch-controlled variable speed wind turbine control. They take the
-     * generator torque, the collective pitch due to the speed error and the
-     * collective pitch introduced for platform stabilisation, and generate the
-     * torque and pitch limits for the speed regulation loops.
+     * This is the above-below rated state machine.
      * 
      * @par Inputs
      * @li torque: generator torque in kN, specify via @link ikTpman_step @endlink
      * @li maximum torque: upper torque limit for speed regulation, in kN, specify via @link ikTpman_step @endlink
      * @li external minimum torque: externally imposed lower torque limit for speed regulation, in kN, specify via @link ikTpman_step @endlink
-     * @li pitch from speed: pitch angle due to speed regulation loop, in degrees, specify via @link ikTpman_step @endlink
-     * @li pitch from platform: pitch angle due to platform stabiliser loop, in degrees, specify via @link ikTpman_step @endlink
-     * @li maximum pitch: upper overall pitch angle limit, in degrees, specify via @link ikTpman_step @endlink
-     * @li external minimum pitch: externally imposed lower overall pitch angle limit, in degrees, specify via @link ikTpman_step @endlink
+     * @li pitch: pitch angle due to speed regulation loop, in degrees, specify via @link ikTpman_step @endlink
+     * @li external maximum pitch: externally imposed upper pitch angle limit, in degrees, specify via @link ikTpman_step @endlink
+     * @li external minimum pitch: externally imposed lower pitch angle limit, in degrees, specify via @link ikTpman_step @endlink
      * 
      * @par Outputs
-     * @li maximum pitch from speed: upper pitch limit for speed regulation, in degrees, get via @link ikTpman_getOutput @endlink
-     * @li minimum pitch: lower overall pitch angle limit, in degrees, get via @link ikTpman_getOutput @endlink
-     * @li maximum pitch from platform: upper pitch limit for platform stabilisation, in degrees, get via @link ikTpman_getOutput @endlink
-     * @li minimum pitch from platform: lower pitch limit for platform stabilisation, in degrees, get via @link ikTpman_getOutput @endlink
+     * @li maximum pitch: upper pitch angle limit, in degrees, get via @link ikTpman_getOutput @endlink
+     * @li minimum pitch: lower pitch angle limit, in degrees, get via @link ikTpman_getOutput @endlink
      * @li minimum torque: lower torque limit for speed regulation, in kN, get via @link ikTpman_getOutput @endlink
      * 
      * @par Unit block
@@ -80,15 +73,12 @@ extern "C" {
         int state;
         double minTorque;
         double minPitch;
-        double maxPitchPltfrm;
-        double minPitchPltfrm;
-        double maxPitchSpeed;
-        ikLutbl * minPitchTbl;
         double maxPitch;
+        ikLutbl * minPitchTbl;
+        double maxPitchExt;
         double minPitchExt;
         double torque;
-        double pitchSpeed;
-        double pitchPlatform;
+        double pitch;
         double minTorqueExt;
         double maxTorque;
         // @endcond
@@ -133,7 +123,7 @@ extern "C" {
      * @li 0: below rated
      * @li 1: above rated
      */
-    int ikTpman_step(ikTpman *self, double torque, double maxTorque, double minTorqueExt, double pitchSpeed, double pitchPlatform, double maxPitch, double minPitchExt);
+    int ikTpman_step(ikTpman *self, double torque, double maxTorque, double minTorqueExt, double pitch, double maxPitchExt, double minPitchExt);
     
     /**
      * Get output value by name. All signals named on the block diagram of

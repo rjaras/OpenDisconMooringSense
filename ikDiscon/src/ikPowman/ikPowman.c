@@ -28,17 +28,13 @@ void ikPowman_initParams(ikPowmanParams *params) {
     
 }
 
-double ikPowman_step(ikPowman *self, double maxPower, double maxSpeed, double resPower) {
+double ikPowman_step(ikPowman *self, double maxPower, double maxSpeed) {
     //save inputs
     self->maxPower = maxPower;
     self->maxSpeed = maxSpeed;
-    self->resPower = resPower;
-    
-    //calculate power limit
-    self->powLim = maxPower - resPower;
     
     if (0.0 < maxSpeed) {
-        self->maxTorque = self->powLim / maxSpeed;
+        self->maxTorque = maxPower / maxSpeed;
     } else {
         self->maxTorque = 0.0;
     }
@@ -50,20 +46,12 @@ int ikPowman_getOutput(const ikPowman *self, double *output, const char *name) {
     char *sep;
 
     // pick up the signal names
-    if (!strcmp(name, "power limit")) {
-        *output = self->powLim;
-        return 0;
-    }
     if (!strcmp(name, "maximum power")) {
         *output = self->maxPower;
         return 0;
     }
     if (!strcmp(name, "maximum speed")) {
         *output = self->maxSpeed;
-        return 0;
-    }
-    if (!strcmp(name, "reserve power")) {
-        *output = self->resPower;
         return 0;
     }
     if (!strcmp(name, "maximum torque")) {

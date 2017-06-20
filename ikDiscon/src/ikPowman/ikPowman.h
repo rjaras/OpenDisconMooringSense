@@ -27,16 +27,11 @@ extern "C" {
      * @struct ikPowman
      * @brief Power manager
      * 
-     * Instances of this type are power managers of the sort used in
-     * pitch-controlled variable speed wind turbine control. They take the
-     * maximum power command, the maximum speed command and power reserve command,
-     * and generate the maximum torque command for the torque-pitch manager, as
-     * well as configure the preferred torque and minimum pitch lookup tables.
+     * This is the power manager
      * 
      * @par Inputs
      * @li maximum power: maximum power command in kW
      * @li maximum speed: maximum generator speed command in rad/s
-     * @li reserve power: reserve power command in kW
      * 
      * @par Outputs
      * @li maximum torque: maximum torque command in kNm
@@ -62,10 +57,8 @@ extern "C" {
          * Private members
          */
         // @cond
-        double powLim;
         double maxPower;
         double maxSpeed;
-        double resPower;
         double maxTorque;
         // @endcond
     } ikPowman;
@@ -100,10 +93,9 @@ extern "C" {
      * @param self power manager instance
      * @param maxPower maximum power command in kW
      * @param maxSpeed maximum generator speed command in rad/s
-     * @param resPower reserve power command in kW
      * @return maximum torque in kN
      */
-    double ikPowman_step(ikPowman *self, double maxPower, double maxSpeed, double resPower);
+    double ikPowman_step(ikPowman *self, double maxPower, double maxSpeed);
     
     /**
      * Get output value by name. All signals named on the block diagram of
