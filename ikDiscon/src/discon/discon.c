@@ -14,13 +14,12 @@ void ikDiscon_EXPORT DISCON(float *DATA, int FLAG, const char *INFILE, const cha
 		ikClwindconWTCon_init(&con, &param);
 	}
 	
-	con.in.externalMaximumTorque = 0.0; // kNm
+	con.in.externalMaximumTorque = 198.0; // kNm
 	con.in.externalMinimumTorque = 0.0; // 0.0
 	con.in.externalMaximumPitch = 90.0; // deg
 	con.in.externalMinimumPitch = 0.0; // deg
 	con.in.generatorSpeed = (double) DATA[19]; // rad/s
-	con.in.maximumPower = (double) DATA[12]*1.0e-3; // W to kW
-	con.in.maximumSpeed = 0.0; // rad/s
+	con.in.maximumSpeed = 480.0/30*3.1416; // rpm to rad/s
 	
 	ikClwindconWTCon_step(&con);
 	

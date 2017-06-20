@@ -25,7 +25,6 @@ extern "C" {
 
 #include "ikConLoop.h"
 #include "ikTpman.h"
-#include "ikPowman.h"
 
     /**
      * @struct ikClwindconWTConInputs
@@ -36,7 +35,6 @@ extern "C" {
         double externalMinimumTorque; /**<external minimum torque in kNm*/
         double externalMaximumPitch; /**<external maximum pitch in degrees*/
         double externalMinimumPitch; /**<external minimum pitch in degrees*/
-        double maximumPower; /**<maximum power setpoint in kW*/
         double maximumSpeed; /**<maximum generator speed setpoing in rad/s*/
         double generatorSpeed; /**<generator speed in rad/s*/
     } ikClwindconWTConInputs;
@@ -56,7 +54,6 @@ extern "C" {
 
     typedef struct ikClwindconWTConPrivate {
         //ikSsproc ssproc;
-        ikPowman  powerManager;
         ikTpman   tpManager;
         ikConLoop dtdamper;
         ikConLoop torquecon;
@@ -64,8 +61,6 @@ extern "C" {
         double maxPitch;
         double minPitch;
         double maxSpeed;
-        double maxTorqueFromPowerMan;
-        double maxTorque;
         int tpManState;
         double minTorque;
         double torqueFromDtdamper;
@@ -85,7 +80,6 @@ extern "C" {
 	 * @li external minimum torque: externally set lower torque limit, specify via @link ikClwindconWTConInputs.externalMinimumTorque @endlink at @link in @endlink
 	 * @li external maximum pitch: externally set upper pitch limit, specify via @link ikClwindconWTConInputs.externalMaximumPitch @endlink at @link in @endlink
 	 * @li external minimum pitch: externally set lower pitch limit, specify via @link ikClwindconWTConInputs.externalMinimumPitch @endlink at @link in @endlink
-     * @li maximum power: maximum power setpoint, specify via @link ikClwindconWTConInputs.maximumPower @endlink at @link in @endlink
      * @li maximum speed: maximum generator speed setpoint, specify via @link ikClwindconWTConInputs.maximumSpeed @endlink at @link in @endlink
      * @li generator speed: current generator speed, specify via @link ikClwindconWTConInputs.generatorSpeed @endlink at @link in @endlink
      * 
@@ -131,7 +125,6 @@ extern "C" {
         ikConLoopParams torqueControl; /**<torque control initialisation parameters*/
         ikConLoopParams collectivePitchControl; /**<collective pitch control initialisation parameters*/
         ikTpmanParams torquePitchManager; /**<torque-pitch manager inintialisation parameters*/
-        ikPowmanParams powerManager; /**<power manager initialisation parameters*/
     } ikClwindconWTConParams;
 
     /**
@@ -144,7 +137,6 @@ extern "C" {
      * @li -2: torque control initialisation failed
      * @li -3: collective pitch control initialisation failed
      * @li -5: torque-pitch manager initialisation failed
-     * @li -6: power manager initialisation failed
      */
     int ikClwindconWTCon_init(ikClwindconWTCon *self, const ikClwindconWTConParams *params);
 
