@@ -1,6 +1,44 @@
 cmake_minimum_required (VERSION 3.7.2)
 project (ikWitcon)
 
+# copy header files to build directory
+configure_file (
+	"${PROJECT_SOURCE_DIR}/ikWitcon/source/ikConLoop/ikConLoop.h"
+	"${PROJECT_BINARY_DIR}/export/ikWitcon-headers/ikConLoop.h"
+)
+configure_file (
+	"${PROJECT_SOURCE_DIR}/ikWitcon/source/ikLinCon/ikLinCon.h"
+	"${PROJECT_BINARY_DIR}/export/ikWitcon-headers/ikLinCon.h"
+)
+configure_file (
+	"${PROJECT_SOURCE_DIR}/ikWitcon/source/ikLutbl/ikLutbl.h"
+	"${PROJECT_BINARY_DIR}/export/ikWitcon-headers/ikLutbl.h"
+)
+configure_file (
+	"${PROJECT_SOURCE_DIR}/ikWitcon/source/ikNotchList/ikNotchList.h"
+	"${PROJECT_BINARY_DIR}/export/ikWitcon-headers/ikNotchList.h"
+)
+configure_file (
+	"${PROJECT_SOURCE_DIR}/ikWitcon/source/ikRegionSelector/ikRegionSelector.h"
+	"${PROJECT_BINARY_DIR}/export/ikWitcon-headers/ikRegionSelector.h"
+)
+configure_file (
+	"${PROJECT_SOURCE_DIR}/ikWitcon/source/ikSlti/ikSlti.h"
+	"${PROJECT_BINARY_DIR}/export/ikWitcon-headers/ikSlti.h"
+)
+configure_file (
+	"${PROJECT_SOURCE_DIR}/ikWitcon/source/ikStpgen/ikStpgen.h"
+	"${PROJECT_BINARY_DIR}/export/ikWitcon-headers/ikStpgen.h"
+)
+configure_file (
+	"${PROJECT_SOURCE_DIR}/ikWitcon/source/ikTfList/ikTfList.h"
+	"${PROJECT_BINARY_DIR}/export/ikWitcon-headers/ikTfList.h"
+)
+configure_file (
+	"${PROJECT_SOURCE_DIR}/ikWitcon/source/ikVfnotch/ikVfnotch.h"
+	"${PROJECT_BINARY_DIR}/export/ikWitcon-headers/ikVfnotch.h"
+)
+
 # ikWitcon include directories
 set (IKWITCON_INCLUDE_DIRS ${IKWITCON_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/ikWitcon/source/ikSlti/)
 set (IKWITCON_INCLUDE_DIRS ${IKWITCON_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/ikWitcon/source/ikTfList/)
