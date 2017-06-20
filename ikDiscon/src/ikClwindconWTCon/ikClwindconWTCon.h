@@ -98,12 +98,10 @@ extern "C" {
      * @par Unit block
      * 
      * @image html ikClwindconWTCon_unit_block.svg
-     * @image latex ikClwindconWTCon_unit_block.pdf
      * 
      * @par Block diagram
      * 
      * @image html ikClwindconWTCon_block_diagram.svg
-     * @image latex ikClwindconWTCon_block_diagram.pdf
      * 
      * @par Public members
      * @li @link in @endlink inputs

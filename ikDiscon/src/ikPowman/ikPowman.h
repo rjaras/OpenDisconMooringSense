@@ -39,12 +39,10 @@ extern "C" {
      * @par Unit block
      * 
      * @image html ikPowman_unit_block.svg
-     * @image latex ikPowman_unit_block.pdf
      * 
      * @par Block diagram
      * 
      * @image html ikPowman_block_diagram.svg
-     * @image latex ikPowman_block_diagram.pdf
      * 
      * @par Methods
      * @li @link ikPowman_initParams @endlink initialise initialisation parameter structure

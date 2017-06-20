@@ -47,17 +47,14 @@ extern "C" {
      * @par Unit block
      * 
      * @image html ikTpman_unit_block.svg
-     * @image latex ikTpman_unit_block.pdf
      * 
      * @par Block diagram
      * 
      * @image html ikTpman_block_diagram.svg
-     * @image latex ikTpman_block_diagram.pdf
      * 
      * @par State machine
      * 
      * @image html ikTpman_state_machine.svg
-     * @image latex ikTpman_state_machine.pdf
      * 
      * @par Methods
      * @li @link ikTpman_initParams @endlink initialise initialisation parameter structure
@@ -115,10 +112,9 @@ extern "C" {
      * @param torque generator torque in kN
      * @param maxTorque upper torque limit for speed regulation, in kN
      * @param minTorqueExt externally imposed lower torque limit for speed regulation, in kN
-     * @param pitchSpeed pitch angle due to speed regulation loop, in degrees
-     * @param pitchPlatform pitch angle due to platform stabiliser loop, in degrees
-     * @param maxPitch upper overall pitch angle limit, in degrees
-     * @param minPitchExt externally imposed lower overall pitch angle limit, in degrees
+     * @param pitch pitch angle, in degrees
+     * @param maxPitchExt externally imposed upper pitch angle limit, in degrees
+     * @param minPitchExt externally imposed lower pitch angle limit, in degrees
      * @return state
      * @li 0: below rated
      * @li 1: above rated
