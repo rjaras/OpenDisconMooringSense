@@ -73,7 +73,7 @@ void ikTuneOptimumTorqueCurve(ikConLoopParams *params) {
     int i;
 
     // implement variable speed at low wind speeds via an optimum torque look-up table.
-    // Kopt = 97.0819 Nms^2/rad^2
+    // Kopt = 97.0819e-3 kNms^2/rad^2
     params->setpointGenerator.nzones = 1;
     params->setpointGenerator.setpoints[0][0] = 31.4159; // [rad/s] 300 rpm
     params->setpointGenerator.setpoints[1][0] = 314.1593; // [rad/s] 3000 rpm (this is to keep the actual setpoint always at 300 rpm)
@@ -81,7 +81,7 @@ void ikTuneOptimumTorqueCurve(ikConLoopParams *params) {
     for (i = 0; i < params->setpointGenerator.preferredControlActionLutblN; i++) {
         double speed = 3.141592653589793 / 30.0 * (300.0 + 10.0 * i);
         params->setpointGenerator.preferredControlActionLutblX[i] = speed;
-        params->setpointGenerator.preferredControlActionLutblY[i] = 97.0819 * speed * speed;
+        params->setpointGenerator.preferredControlActionLutblY[i] = 97.0819e-3 * speed * speed;
     }
     
 }
@@ -107,15 +107,15 @@ void ikTunePitchPIGainSchedule(ikConLoopParams *params) {
     params->linearController.gainSchedX[9] = 23.6774;
     
     params->linearController.gainSchedY[0] = 1.0000;
-    params->linearController.gainSchedY[0] = 1.0000;
-    params->linearController.gainSchedY[0] = 2.0727;
-    params->linearController.gainSchedY[0] = 1.7182;
-    params->linearController.gainSchedY[0] = 1.5182;
-    params->linearController.gainSchedY[0] = 1.3545;
-    params->linearController.gainSchedY[0] = 1.2636;
-    params->linearController.gainSchedY[0] = 1.1909;
-    params->linearController.gainSchedY[0] = 1.1182;
-    params->linearController.gainSchedY[0] = 1.0545;
+    params->linearController.gainSchedY[1] = 1.0000;
+    params->linearController.gainSchedY[2] = 2.0727;
+    params->linearController.gainSchedY[3] = 1.7182;
+    params->linearController.gainSchedY[4] = 1.5182;
+    params->linearController.gainSchedY[5] = 1.3545;
+    params->linearController.gainSchedY[6] = 1.2636;
+    params->linearController.gainSchedY[7] = 1.1909;
+    params->linearController.gainSchedY[8] = 1.1182;
+    params->linearController.gainSchedY[9] = 1.0545;
     
 }
 
@@ -140,14 +140,6 @@ void ikTunePitchLowpassFilter(ikConLoopParams *params, double T) {
     //                (0.5*T*w)^2                                                                     z^2 + 2z + 1       
     // H(z) =  -----------------------------   ------------------------------------------------------------------------------------------------------------------------
     //         1 + T*d*w +  (0.5*T*w)^2    z^2 - 2*(1 - (0.5*T*w)^2) / (1 + T*d*w +  (0.5*T*w)^2)z +  (1 - T*d*w +  (0.5*T*w)^2) / (1 + T*d*w +  (0.5*T*w)^2)                    
-    params->linearController.measurementTfs.tfParams[0].enable = 1;
-    params->linearController.measurementTfs.tfParams[0].b[0] = 1.0;
-    params->linearController.measurementTfs.tfParams[0].b[1] = 2.0;
-    params->linearController.measurementTfs.tfParams[0].b[2] = 1.0;
-    params->linearController.measurementTfs.tfParams[0].a[0] = 1.0;
-    params->linearController.measurementTfs.tfParams[0].a[1] = -2 * (1 - (0.5*T*w)*(0.5*T*w)) / (1 + T*d*w + (0.5*T*w)*(0.5*T*w));
-    params->linearController.measurementTfs.tfParams[0].a[2] = (1 - T*d*w + (0.5*T*w)*(0.5*T*w)) / (1 + T*d*w + (0.5*T*w)*(0.5*T*w));
-    
     params->linearController.measurementTfs.tfParams[1].enable = 1;
     params->linearController.measurementTfs.tfParams[1].b[0] = 1.0;
     params->linearController.measurementTfs.tfParams[1].b[1] = 2.0;
@@ -157,7 +149,15 @@ void ikTunePitchLowpassFilter(ikConLoopParams *params, double T) {
     params->linearController.measurementTfs.tfParams[1].a[2] = (1 - T*d*w + (0.5*T*w)*(0.5*T*w)) / (1 + T*d*w + (0.5*T*w)*(0.5*T*w));
     
     params->linearController.measurementTfs.tfParams[2].enable = 1;
-    params->linearController.measurementTfs.tfParams[2].b[0] = ((0.5*T*w)*(0.5*T*w) / (1 + T*d*w + (0.5*T*w)*(0.5*T*w))) * ((0.5*T*w)*(0.5*T*w) / (1 + T*d*w + (0.5*T*w)*(0.5*T*w)));    
+    params->linearController.measurementTfs.tfParams[2].b[0] = 1.0;
+    params->linearController.measurementTfs.tfParams[2].b[1] = 2.0;
+    params->linearController.measurementTfs.tfParams[2].b[2] = 1.0;
+    params->linearController.measurementTfs.tfParams[2].a[0] = 1.0;
+    params->linearController.measurementTfs.tfParams[2].a[1] = -2 * (1 - (0.5*T*w)*(0.5*T*w)) / (1 + T*d*w + (0.5*T*w)*(0.5*T*w));
+    params->linearController.measurementTfs.tfParams[2].a[2] = (1 - T*d*w + (0.5*T*w)*(0.5*T*w)) / (1 + T*d*w + (0.5*T*w)*(0.5*T*w));
+    
+    params->linearController.measurementTfs.tfParams[3].enable = 1;
+    params->linearController.measurementTfs.tfParams[3].b[0] = ((0.5*T*w)*(0.5*T*w) / (1 + T*d*w + (0.5*T*w)*(0.5*T*w))) * ((0.5*T*w)*(0.5*T*w) / (1 + T*d*w + (0.5*T*w)*(0.5*T*w)));    
     
 }
 
@@ -209,9 +209,25 @@ void ikTunePitchPI(ikConLoopParams *params, double T) {
     // C(z) = ------------------------------
     //                   z - 1            
 	// rad/s --> deg
+	params->linearController.demandTfs.tfParams[0].enable = 1;
+    params->linearController.demandTfs.tfParams[0].b[0] = (Kp + Ki*T/2);
+    params->linearController.demandTfs.tfParams[0].b[1] = -(Kp - Ki*T/2);
+    params->linearController.demandTfs.tfParams[0].b[2] = 0.0;
+    params->linearController.demandTfs.tfParams[0].a[0] = 1.0;
+    params->linearController.demandTfs.tfParams[0].a[1] = 0.0;
+    params->linearController.demandTfs.tfParams[0].a[2] = 0.0;
+
+	params->linearController.measurementTfs.tfParams[0].enable = 1;
+    params->linearController.measurementTfs.tfParams[0].b[0] = (Kp + Ki*T/2);
+    params->linearController.measurementTfs.tfParams[0].b[1] = -(Kp - Ki*T/2);
+    params->linearController.measurementTfs.tfParams[0].b[2] = 0.0;
+    params->linearController.measurementTfs.tfParams[0].a[0] = 1.0;
+    params->linearController.measurementTfs.tfParams[0].a[1] = 0.0;
+    params->linearController.measurementTfs.tfParams[0].a[2] = 0.0;
+
 	params->linearController.errorTfs.tfParams[0].enable = 1;
-    params->linearController.errorTfs.tfParams[0].b[0] = (Kp + Ki*T/2);
-    params->linearController.errorTfs.tfParams[0].b[1] = -(Kp - Ki*T/2);
+    params->linearController.errorTfs.tfParams[0].b[0] = 1.0;
+    params->linearController.errorTfs.tfParams[0].b[1] = 0.0;
     params->linearController.errorTfs.tfParams[0].b[2] = 0.0;
     params->linearController.errorTfs.tfParams[0].a[0] = 1.0;
     params->linearController.errorTfs.tfParams[0].a[1] = -1.0;
