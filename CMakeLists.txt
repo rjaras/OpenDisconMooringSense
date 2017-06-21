@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.7.2)
+cmake_minimum_required (VERSION 3.5.1)
 project (ikWitcon)
 
 # copy ikDiscon directory to build directory
@@ -58,4 +58,5 @@ set (IKWITCON_SOURCES ${IKWITCON_SOURCES} ${PROJECT_SOURCE_DIR}/ikWitcon/source/
 set (IKWITCON_SOURCES ${IKWITCON_SOURCES} ${PROJECT_SOURCE_DIR}/ikWitcon/source/ikConLoop/ikConLoop.c)
 
 # static ikWitcon private library
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 add_library (ikWitcon STATIC ${IKWITCON_SOURCES})

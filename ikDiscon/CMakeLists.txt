@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.7.2)
+cmake_minimum_required (VERSION 3.5.1)
 project (ikDiscon)
 
 # Version number
@@ -28,4 +28,11 @@ GENERATE_EXPORT_HEADER (ikDiscon
 	EXPORT_FILE_NAME ikDiscon_EXPORT.h
 	STATIC_DEFINE ikDiscon_BUILT_AS_STATIC
 )
-target_link_libraries (ikDiscon PRIVATE ${PROJECT_SOURCE_DIR}/ikWitcon.lib)
+if (WIN32)
+	target_link_libraries (ikDiscon PRIVATE ${PROJECT_SOURCE_DIR}/ikWitcon.lib)
+endif (WIN32)
+
+if (UNIX)
+	target_link_libraries (ikDiscon PRIVATE ${PROJECT_SOURCE_DIR}/libikWitcon.a)
+endif (UNIX)
+
