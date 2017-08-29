@@ -84,7 +84,7 @@ int ikTpman_step(ikTpman *self, double torque, double maxTorque, double minTorqu
 }
 
 int ikTpman_getOutput(const ikTpman *self, double *output, const char *name) {
-    char *sep;
+    const char *sep;
 
     // pick up the signal names
     if (!strcmp(name, "minimum pitch")) {
