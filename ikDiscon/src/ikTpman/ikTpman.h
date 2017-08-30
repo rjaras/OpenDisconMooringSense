@@ -66,7 +66,7 @@ extern "C" {
         /**
          * Private members
          */
-        // @cond
+        /* @cond */
         int state;
         double minTorque;
         double minPitch;
@@ -78,7 +78,7 @@ extern "C" {
         double pitch;
         double minTorqueExt;
         double maxTorque;
-        // @endcond
+        /* @endcond */
     } ikTpman;
     
     /**

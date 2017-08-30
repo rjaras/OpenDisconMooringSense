@@ -50,10 +50,9 @@ extern "C" {
         double pitchDemandBlade3; /**<pitch demand for blade 3 in degrees*/
     } ikClwindconWTConOutputs;
 
-    // @cond
+    /* @cond */
 
     typedef struct ikClwindconWTConPrivate {
-        //ikSsproc ssproc;
         ikTpman   tpManager;
         ikConLoop dtdamper;
         ikConLoop torquecon;
@@ -67,7 +66,7 @@ extern "C" {
         double torqueFromTorqueCon;
         double collectivePitchDemand;
     } ikClwindconWTConPrivate;
-    // @endcond
+    /* @endcond */
 
     /**
      * @struct ikClwindconWTCon
@@ -111,9 +110,9 @@ extern "C" {
     typedef struct ikClwindconWTCon {
         ikClwindconWTConInputs in; /**<inputs*/
         ikClwindconWTConOutputs out; /**<outputs*/
-        // @cond
+        /* @cond */
         ikClwindconWTConPrivate priv;
-        // @endcond
+        /* @endcond */
     } ikClwindconWTCon;
 
     /**

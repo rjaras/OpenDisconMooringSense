@@ -16,7 +16,7 @@
  * @brief Class ikTpman implementation
  */
 
-// @cond
+/* @cond */
 
 #include <stdlib.h>
 #include <string.h>
@@ -24,10 +24,10 @@
 #include "../ikTpman/ikTpman.h"
 
 int ikTpman_init(ikTpman *self, const ikTpmanParams *params) {
-    // register lookup table
+    /* register lookup table */
     self->minPitchTbl = params->minPitchTbl;
 
-    // set state to 0
+    /* set state to 0 */
     self->state = 0;
 
     return 0;
@@ -38,7 +38,7 @@ void ikTpman_initParams(ikTpmanParams *params) {
 }
 
 int ikTpman_step(ikTpman *self, double torque, double maxTorque, double minTorqueExt, double pitch, double maxPitchExt, double minPitchExt) {
-    // save inputs
+    /* save inputs */
     self->maxPitchExt = maxPitchExt;
     self->minPitchExt = minPitchExt;
     self->torque = torque;
@@ -46,7 +46,7 @@ int ikTpman_step(ikTpman *self, double torque, double maxTorque, double minTorqu
     self->minTorqueExt = minTorqueExt;
     self->maxTorque = maxTorque;
 
-    // apply lookup table and external minimum pitch
+    /* apply lookup table and external minimum pitch */
     if (NULL != self->minPitchTbl) {
         self->minPitch = ikLutbl_eval(self->minPitchTbl, torque);
         self->minPitch = self->minPitch > minPitchExt ? self->minPitch : minPitchExt;
@@ -54,7 +54,7 @@ int ikTpman_step(ikTpman *self, double torque, double maxTorque, double minTorqu
         self->minPitch = minPitchExt;
     }
 
-    // transition between states if necessary
+    /* transition between states if necessary */
     switch (self->state) {
         case 0:
             if ((torque >= maxTorque) || (pitch > self->minPitch)) self->state = 1;
@@ -64,7 +64,7 @@ int ikTpman_step(ikTpman *self, double torque, double maxTorque, double minTorqu
             break;
     }
 
-    // calculate limits depending on state
+    /* calculate limits depending on state */
     switch (self->state) {
         case 0:
             self->maxPitch = pitch;
@@ -86,7 +86,7 @@ int ikTpman_step(ikTpman *self, double torque, double maxTorque, double minTorqu
 int ikTpman_getOutput(const ikTpman *self, double *output, const char *name) {
     const char *sep;
 
-    // pick up the signal names
+    /* pick up the signal names */
     if (!strcmp(name, "minimum pitch")) {
         *output = self->minPitch;
         return 0;
@@ -124,14 +124,14 @@ int ikTpman_getOutput(const ikTpman *self, double *output, const char *name) {
         return 0;
     }
 
-    // pick up the block names
+    /* pick up the block names */
     sep = strstr(name, ">");
     if (NULL == sep) return -1;
 
     return -2;
 }
 
-// @endcond
+/* @endcond */
 
 
 
