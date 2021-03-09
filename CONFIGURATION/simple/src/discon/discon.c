@@ -27,9 +27,11 @@ void OpenDiscon_EXPORT DISCON(float *DATA, int FLAG, const char *INFILE, const c
     static ikSimpleWTCon con;
                 
     if (NINT(DATA[0]) == 0) {
+        const double samplingInterval = (double)DATA[2];
+
         ikSimpleWTConParams param;
         ikSimpleWTCon_initParams(&param);
-        setParams(&param);
+        setParams(&param, samplingInterval);
         ikSimpleWTCon_init(&con, &param);
     }
 

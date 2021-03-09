@@ -45,10 +45,20 @@ int ikPowman_init(ikPowman *self, const ikPowmanParams *params) {
     err = ikLutbl_setPoints(&(self->lutblKopt), params->belowRatedTorqueGainTableN, params->belowRatedTorqueGainTableX, params->belowRatedTorqueGainTableY);
     if (err) return -2;
         
-    ikLutbl_init(&(self->lutblPitch));
-    err = ikLutbl_setPoints(&(self->lutblPitch), params->minimumPitchTableN, params->minimumPitchTableX, params->minimumPitchTableY);
+    ikLutbl_init(&(self->lutblPitchDerating));
+    err = ikLutbl_setPoints(&(self->lutblPitchDerating), params->minimumPitchDeratingTableN, params->minimumPitchDeratingTableX, params->minimumPitchDeratingTableY);
     if (err) return -3;
-        
+    
+    ikLutbl_init(&(self->lutblPitchGenSpeed));
+    err = ikLutbl_setPoints(&(self->lutblPitchGenSpeed), params->minimumPitchGenSpeedTableN, params->minimumPitchGenSpeedTableX, params->minimumPitchGenSpeedTableY);
+    if (err) return -4;
+
+    /* register samplingInterval */
+    self->samplingInterval = params->samplingInterval;
+
+    self->minimumPitchGenSpeedMinRate = params->minimumPitchGenSpeedMinRate;
+    self->minimumPitchGenSpeedMaxRate = params->minimumPitchGenSpeedMaxRate;
+
     return 0;
 }
 
@@ -65,9 +75,17 @@ void ikPowman_initParams(ikPowmanParams *params) {
     params->belowRatedTorqueGainTableY[0] = 0.0;
         
     /* make the minimum pitch 0 */
-    params->minimumPitchTableN = 1;
-    params->minimumPitchTableX[0] = 0.0;
-    params->minimumPitchTableY[0] = 0.0;
+    params->minimumPitchDeratingTableN = 1;
+    params->minimumPitchDeratingTableX[0] = 0.0;
+    params->minimumPitchDeratingTableY[0] = 0.0;
+
+    /* Initialize the generator speed - minimum pitch table */
+    params->minimumPitchGenSpeedTableN = 1;
+    params->minimumPitchGenSpeedTableX[0] = 0.0;
+    params->minimumPitchGenSpeedTableY[0] = 0.0;
+
+    /* set sampling interval to 0.01s */
+    params->samplingInterval = 0.01;
 }
 
 double ikPowman_step(ikPowman *self, double deratingRatio, double maxSpeed, double measuredSpeed) {
@@ -82,9 +100,26 @@ double ikPowman_step(ikPowman *self, double deratingRatio, double maxSpeed, doub
     /* calculate below rated torque */
     self->belowRatedTorque = ikLutbl_eval(&(self->lutblKopt), deratingRatio)*measuredSpeed*measuredSpeed;
         
-    /* calculate minimum pitch */
-    self->minimumPitch = ikLutbl_eval(&(self->lutblPitch), deratingRatio);
-        
+    /* calculate minimum pitch value caused by derating ratio */
+    double minimumPitchDerating = ikLutbl_eval(&(self->lutblPitchDerating), deratingRatio);
+
+    /* calculate minimum pitch value caused by generator speed */
+    static double minimumPitchGenSpeed;
+    double newMinimumPitchGenSpeed = ikLutbl_eval(&(self->lutblPitchGenSpeed), measuredSpeed);
+    double pitchChange = newMinimumPitchGenSpeed - minimumPitchGenSpeed;
+    if (pitchChange > self->minimumPitchGenSpeedMaxRate * self->samplingInterval) {
+        minimumPitchGenSpeed = minimumPitchGenSpeed + self->minimumPitchGenSpeedMaxRate * self->samplingInterval;
+    } 
+    else if (pitchChange < self->minimumPitchGenSpeedMinRate * self->samplingInterval) {
+        minimumPitchGenSpeed = minimumPitchGenSpeed + self->minimumPitchGenSpeedMinRate * self->samplingInterval;
+    }
+    else {
+        minimumPitchGenSpeed = newMinimumPitchGenSpeed;
+    }
+
+    /* calculate minimum pitch (total) */
+    self->minimumPitch = max(minimumPitchDerating, minimumPitchGenSpeed);
+
     /* return the maximum torque */
     return self->maximumTorque;
 }

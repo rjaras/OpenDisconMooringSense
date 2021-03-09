@@ -25,33 +25,31 @@
 
 #include "ikSimpleWTConfig.h"
 
-void setParams(ikSimpleWTConParams *param) {
+void setParams(ikSimpleWTConParams *param, double samplingInterval) {
     /*! [Sampling interval] */
     /*
       ####################################################################
       Sampling interval
 
-      Set sampling interval here:
-    */
-    const double T = 0.01; /* [s] */
-    /*
+      Set sampling interval in discon.c
       ####################################################################
     */
     /*! [Sampling interval] */
 
-    ikTuneDrivetrainDamper(&(param->drivetrainDamper), T);
+    ikTuneDrivetrainDamper(&(param->drivetrainDamper), samplingInterval);
     ikTuneSpeedRange(&(param->torqueControl));
     ikTunePowerSettings(&(param->powerManager));
     ikTuneDeratingTorqueStrategy(&(param->powerManager));
     ikTuneDeratingPitchStrategy(&(param->powerManager));
+    ikTuneGenSpeedPitchStrategy(&(param->powerManager), samplingInterval);
     ikTunePitchPIGainSchedule(&(param->collectivePitchControl));
-    ikTunePitchLowpassFilter(&(param->collectivePitchControl), T);
-    ikTunePitchNotches(&(param->collectivePitchControl), T);
-    ikTunePitchPI(&(param->collectivePitchControl), T);
-    ikTuneTorqueLowpassFilter(&(param->torqueControl), T);
-    ikTuneTorqueNotches(&(param->torqueControl), T);
-    ikTuneTorquePI(&(param->torqueControl), T);
-
+    ikTunePitchLowpassFilter(&(param->collectivePitchControl), samplingInterval);
+    ikTunePitchNotches(&(param->collectivePitchControl), samplingInterval);
+    ikTunePitchPI(&(param->collectivePitchControl), samplingInterval);
+    ikTuneTorqueLowpassFilter(&(param->torqueControl), samplingInterval);
+    ikTuneTorqueNotches(&(param->torqueControl), samplingInterval);
+    ikTuneTorquePI(&(param->torqueControl), samplingInterval);
+    
 }
 
 void ikTuneDrivetrainDamper(ikConLoopParams *params, double T) {
@@ -190,12 +188,52 @@ void ikTuneDeratingPitchStrategy(ikPowmanParams *params) {
     */
     /*! [Minimum pitch] */
 
-    params->minimumPitchTableN = n;
+    params->minimumPitchDeratingTableN = n;
     for (i = 0; i < n; i++) {
-        params->minimumPitchTableX[i] = dr[i];
-        params->minimumPitchTableY[i] = pitch[i]/3.1416*180.0;
+        params->minimumPitchDeratingTableX[i] = dr[i];
+        params->minimumPitchDeratingTableY[i] = pitch[i]/3.1416*180.0;
     }           
 }
+
+void ikTuneGenSpeedPitchStrategy(ikPowmanParams* params, double T) {
+    /*
+      @rjaras implementation of pitch minimum value taking into account generator speed.
+    */
+
+    int i;
+
+    /*! [Minimum pitch] */
+    /*
+      ####################################################################
+      Minimum pitch
+
+      Set parameters here:
+    */
+    const int n = 2; /* number of points in the lookup table */
+    const double genSpeed[] = { 45.919427, 50.2656 }; /* rad/s */
+    //const double pitch[] = { 0.00,  0.05236 }; /* rad -> 3deg*/
+    const double pitch[] = { 0.00,  0.10472 }; /* rad -> 6deg*/
+    //const double pitch[] = { 0.00,  0.00 }; /* rad -> DEACTIVATED*/ 
+
+    const double minimumPitchGenSpeedMinRate = -0.1; /* deg/s */
+    const double minimumPitchGenSpeedMaxRate = 2.5; /* deg/s */
+
+    /*
+      ####################################################################
+    */
+    /*! [Minimum pitch] */
+
+    params->minimumPitchGenSpeedTableN = n;
+    for (i = 0; i < n; i++) {
+        params->minimumPitchGenSpeedTableX[i] = genSpeed[i];
+        params->minimumPitchGenSpeedTableY[i] = pitch[i] / 3.1416 * 180.0;
+    }
+
+    params->samplingInterval = T;
+    params->minimumPitchGenSpeedMinRate = minimumPitchGenSpeedMinRate;
+    params->minimumPitchGenSpeedMaxRate = minimumPitchGenSpeedMaxRate;
+}
+
 
 void ikTunePitchPIGainSchedule(ikConLoopParams *params) {
     int i;

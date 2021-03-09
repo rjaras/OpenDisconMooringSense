@@ -70,13 +70,17 @@ extern "C" {
         double ratedPower;
         double efficiency;
         ikLutbl lutblKopt;
-        ikLutbl lutblPitch;
+        ikLutbl lutblPitchDerating;
+        ikLutbl lutblPitchGenSpeed;
         double deratingRatio;
         double maxSpeed;
         double measuredSpeed;
         double maximumTorque;
         double belowRatedTorque;
         double minimumPitch;
+        double samplingInterval;
+        double minimumPitchGenSpeedMaxRate;
+        double minimumPitchGenSpeedMinRate;
         /* @endcond */
     } ikPowman;
     
@@ -90,9 +94,15 @@ extern "C" {
         int                 belowRatedTorqueGainTableN; /**<number of points defining the below rated torque gain table. The default value is 1.*/
         double              belowRatedTorqueGainTableX [IKLUTBL_MAXPOINTS]; /**<derating ratios defining the below rated torque gain table, non-dimensional. The default value is {0.0, 0.0, ...}*/
         double              belowRatedTorqueGainTableY [IKLUTBL_MAXPOINTS]; /**<gains defining the below rated torque gain table, in kNm*s^2/rad^2. The default value is {0.0, 0.0, ...}*/
-        int                 minimumPitchTableN; /**<number of points defining the minimum pitch table. The default value is 1.*/
-        double              minimumPitchTableX [IKLUTBL_MAXPOINTS]; /**<derating ratios defining the minimum pitch table, non-dimensional. The default value is {0.0, 0.0, ...}*/
-        double              minimumPitchTableY [IKLUTBL_MAXPOINTS]; /**<pitch angles defining the minimum pitch table, in degrees. The default value is {0.0, 0.0, ...}*/
+        int                 minimumPitchDeratingTableN; /**<number of points defining the derating ratio - minimum pitch table. The default value is 1.*/
+        double              minimumPitchDeratingTableX [IKLUTBL_MAXPOINTS]; /**<derating ratios defining the derating ratio - minimum pitch table, non-dimensional. The default value is {0.0, 0.0, ...}*/
+        double              minimumPitchDeratingTableY [IKLUTBL_MAXPOINTS]; /**<pitch angles defining the derating ratio - minimum pitch table, in degrees. The default value is {0.0, 0.0, ...}*/
+        int                 minimumPitchGenSpeedTableN; /**<number of points defining the generator speed - minimum pitch table. The default value is 1.*/
+        double              minimumPitchGenSpeedTableX[IKLUTBL_MAXPOINTS]; /**<generator speeds defining the generator speed - minimum pitch table, non-dimensional. The default value is {0.0, 0.0, ...}*/
+        double              minimumPitchGenSpeedTableY[IKLUTBL_MAXPOINTS]; /**<pitch angles defining the generator speed - minimum pitch table, in degrees. The default value is {0.0, 0.0, ...}*/
+        double              samplingInterval;
+        double              minimumPitchGenSpeedMaxRate;
+        double              minimumPitchGenSpeedMinRate;
     } ikPowmanParams;
     
     /**
@@ -103,7 +113,8 @@ extern "C" {
      * @li 0: no error
      * @li -1: invalid efficiency value, must be non-zero
      * @li -2: invalid below rated speed-torque curve gain look-up table initialisation parameters
-     * @li -3: invalid minimum pitch look-up table initialisation parameters
+     * @li -3: invalid derating minimum pitch look-up table initialisation parameters
+     * @li -4: invalid generator speed minimum pitch look-up table initialisation parameters
      */
     int ikPowman_init(ikPowman *self, const ikPowmanParams *params);
     
