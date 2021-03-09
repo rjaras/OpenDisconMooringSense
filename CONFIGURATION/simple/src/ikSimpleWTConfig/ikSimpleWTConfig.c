@@ -153,7 +153,7 @@ void ikTuneDeratingTorqueStrategy(ikPowmanParams *params) {
     */
     const int n = 1; /* number of points in the lookup table */
     const double dr[] = {0.00}; /* - */
-    const double Kopt[] = {90.61}; /* Nm*s^2/rad^2 */
+    const double Kopt[] = { 103.278666 }; /* Nm*s^2/rad^2 */
     /*
       ####################################################################
     */
