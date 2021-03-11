@@ -31,6 +31,7 @@ extern "C" {
 #endif
     
 #include "ikLutbl.h"
+#include "ikTfList.h"
     
     /**
      * @struct ikPowman
@@ -81,6 +82,8 @@ extern "C" {
         double samplingInterval;
         double minimumPitchGenSpeedMaxRate;
         double minimumPitchGenSpeedMinRate;
+        ikTfList generatorSpeedFilter;
+        double filteredSpeed;
         /* @endcond */
     } ikPowman;
     
@@ -103,6 +106,7 @@ extern "C" {
         double              samplingInterval;
         double              minimumPitchGenSpeedMaxRate;
         double              minimumPitchGenSpeedMinRate;
+        ikTfListParams      generatorSpeedFilter;
     } ikPowmanParams;
     
     /**

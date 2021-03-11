@@ -232,6 +232,37 @@ void ikTuneGenSpeedPitchStrategy(ikPowmanParams* params, double T) {
     params->samplingInterval = T;
     params->minimumPitchGenSpeedMinRate = minimumPitchGenSpeedMinRate;
     params->minimumPitchGenSpeedMaxRate = minimumPitchGenSpeedMaxRate;
+
+
+    /*! [Generator Speed lowpass filter] */
+    /*
+      ####################################################################
+      Transfer function (to be done twice as we want a 4th order filter):
+      H(s) = w^2 / (s^2 + 2*d*w*s + w^2)
+
+      Passing to the z-domain:
+                    (0.5*T*w)^2                                                                   z^2 + 2z + 1
+      H(z) =  --------------------------- -----------------------------------------------------------------------------------------------------------------
+               1 + T*d*w + (0.5*T*w)^2     z^2 - 2*(1 - (0.5*T*w)^2) / (1 + T*d*w + (0.5*T*w)^2)z + (1 - T*d*w + (0.5*T*w)^2) / (1 + T*d*w + (0.5*T*w)^2)
+    */
+    params->generatorSpeedFilter.tfParams[0].enable = 1;
+    params->generatorSpeedFilter.tfParams[0].b[0] = 1.0;
+    params->generatorSpeedFilter.tfParams[0].b[1] = 2.0;
+    params->generatorSpeedFilter.tfParams[0].b[2] = 1.0;
+    params->generatorSpeedFilter.tfParams[0].a[0] = 1.0;
+    params->generatorSpeedFilter.tfParams[0].a[1] = -2 * (1 - (0.5 * T * w) * (0.5 * T * w)) / (1 + T * d * w + (0.5 * T * w) * (0.5 * T * w));
+    params->generatorSpeedFilter.tfParams[0].a[2] = (1 - T * d * w + (0.5 * T * w) * (0.5 * T * w)) / (1 + T * d * w + (0.5 * T * w) * (0.5 * T * w));
+
+    params->generatorSpeedFilter.tfParams[1].enable = 1;
+    params->generatorSpeedFilter.tfParams[1].b[0] = 1.0;
+    params->generatorSpeedFilter.tfParams[1].b[1] = 2.0;
+    params->generatorSpeedFilter.tfParams[1].b[2] = 1.0;
+    params->generatorSpeedFilter.tfParams[1].a[0] = 1.0;
+    params->generatorSpeedFilter.tfParams[1].a[1] = -2 * (1 - (0.5 * T * w) * (0.5 * T * w)) / (1 + T * d * w + (0.5 * T * w) * (0.5 * T * w));
+    params->generatorSpeedFilter.tfParams[1].a[2] = (1 - T * d * w + (0.5 * T * w) * (0.5 * T * w)) / (1 + T * d * w + (0.5 * T * w) * (0.5 * T * w));
+
+    params->generatorSpeedFilter.tfParams[2].enable = 1;
+    params->generatorSpeedFilter.tfParams[2].b[0] = ((0.5 * T * w) * (0.5 * T * w) / (1 + T * d * w + (0.5 * T * w) * (0.5 * T * w))) * ((0.5 * T * w) * (0.5 * T * w) / (1 + T * d * w + (0.5 * T * w) * (0.5 * T * w)));
 }
 
 

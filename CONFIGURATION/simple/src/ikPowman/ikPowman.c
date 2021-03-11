@@ -56,8 +56,13 @@ int ikPowman_init(ikPowman *self, const ikPowmanParams *params) {
     /* register samplingInterval */
     self->samplingInterval = params->samplingInterval;
 
+    /* initialize minimum pitch variation rates */
     self->minimumPitchGenSpeedMinRate = params->minimumPitchGenSpeedMinRate;
     self->minimumPitchGenSpeedMaxRate = params->minimumPitchGenSpeedMaxRate;
+
+    /* initialize generator speed filter instance */
+    err = ikTfList_init(&(self->generatorSpeedFilter), &(params->generatorSpeedFilter));
+    if (err) return -5;
 
     return 0;
 }
@@ -86,9 +91,12 @@ void ikPowman_initParams(ikPowmanParams *params) {
 
     /* set sampling interval to 0.01s */
     params->samplingInterval = 0.01;
+    ikTfList_initParams(&(params->generatorSpeedFilter));
 }
 
 double ikPowman_step(ikPowman *self, double deratingRatio, double maxSpeed, double measuredSpeed) {
+    static double minimumPitchGenSpeed;
+    
     /* register inputs */
     self->deratingRatio = deratingRatio;
     self->maxSpeed = maxSpeed;
@@ -104,8 +112,8 @@ double ikPowman_step(ikPowman *self, double deratingRatio, double maxSpeed, doub
     double minimumPitchDerating = ikLutbl_eval(&(self->lutblPitchDerating), deratingRatio);
 
     /* calculate minimum pitch value caused by generator speed */
-    static double minimumPitchGenSpeed;
-    double newMinimumPitchGenSpeed = ikLutbl_eval(&(self->lutblPitchGenSpeed), measuredSpeed);
+    self->filteredSpeed = ikTfList_step(&(self->generatorSpeedFilter), measuredSpeed);
+    double newMinimumPitchGenSpeed = ikLutbl_eval(&(self->lutblPitchGenSpeed), self->filteredSpeed);
     double pitchChange = newMinimumPitchGenSpeed - minimumPitchGenSpeed;
     if (pitchChange > self->minimumPitchGenSpeedMaxRate * self->samplingInterval) {
         minimumPitchGenSpeed = minimumPitchGenSpeed + self->minimumPitchGenSpeedMaxRate * self->samplingInterval;
@@ -148,6 +156,10 @@ int ikPowman_getOutput(const ikPowman *self, double *output, const char *name) {
     }
     if (!strcmp(name, "minimum pitch")) {
         *output = self->minimumPitch;
+        return 0;
+    }
+    if (!strcmp(name, "filtered generator speed")) {
+        *output = self->filteredSpeed;
         return 0;
     }
         
