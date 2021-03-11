@@ -209,14 +209,22 @@ void ikTuneGenSpeedPitchStrategy(ikPowmanParams* params, double T) {
 
       Set parameters here:
     */
+
+    // Generator Speed - minimum pitch table
     const int n = 2; /* number of points in the lookup table */
     const double genSpeed[] = { 45.919427, 50.2656 }; /* rad/s */
     //const double pitch[] = { 0.00,  0.05236 }; /* rad -> 3deg*/
-    const double pitch[] = { 0.00,  0.10472 }; /* rad -> 6deg*/
+    //const double pitch[] = { 0.00,  0.10472 }; /* rad -> 6deg*/
+    const double pitch[] = { 0.00,  5.0 * 3.1416 / 180.0 }; /* rad -> 5deg*/
     //const double pitch[] = { 0.00,  0.00 }; /* rad -> DEACTIVATED*/ 
 
-    const double minimumPitchGenSpeedMinRate = -0.1; /* deg/s */
-    const double minimumPitchGenSpeedMaxRate = 2.5; /* deg/s */
+    // Minimum pitch maximum allowed rates
+    const double minimumPitchGenSpeedMinRate = -0.01; /* deg/s */
+    const double minimumPitchGenSpeedMaxRate = 1.5; /* deg/s */
+
+    // Generator speed low pass filtering parameters
+    const double w = 1.0 * 2.0 * 3.1416; /* [rad/s] */
+    const double d = 0.5; /* [-] */
 
     /*
       ####################################################################
