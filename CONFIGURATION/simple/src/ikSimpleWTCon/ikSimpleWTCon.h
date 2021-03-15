@@ -47,6 +47,7 @@ extern "C" {
         double externalMinimumPitchRate; /**<external minimum pitch rate in degrees per second*/
         double maximumSpeed; /**<maximum generator speed setpoing in rad/s*/
         double generatorSpeed; /**<generator speed in rad/s*/
+        double nacellePitchAcceleration; /**<nacelle pitch acceleration in rad/s2*/
     } ikSimpleWTConInputs;
 
     /**
@@ -66,6 +67,7 @@ extern "C" {
         ikConLoop dtdamper;
         ikConLoop torquecon;
         ikConLoop colpitchcon;
+        ikSlti torqueFromHubPitchSlti;
         double maxPitch;
         double minPitch;
         double maxSpeed;
@@ -77,6 +79,7 @@ extern "C" {
         double belowRatedTorque;
         double minPitchFromPowman;
         double maxTorqueFromPowman;
+        double torqueFromHubPitch;
     } ikSimpleWTConPrivate;
     /* @endcond */
 
@@ -137,6 +140,7 @@ extern "C" {
         ikConLoopParams collectivePitchControl; /**<collective pitch control initialisation parameters*/
         ikTpmanParams torquePitchManager; /**<torque-pitch manager inintialisation parameters*/
         ikPowmanParams powerManager; /**<power manager initialisation parameters*/
+        ikSlti torqueFromHubPitchSlti; /**<torque value related to platform pitch lti system parameters*/
     } ikSimpleWTConParams;
 
     /**

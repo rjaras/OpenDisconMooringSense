@@ -49,7 +49,7 @@ void setParams(ikSimpleWTConParams *param, double samplingInterval) {
     ikTuneTorqueLowpassFilter(&(param->torqueControl), samplingInterval);
     ikTuneTorqueNotches(&(param->torqueControl), samplingInterval);
     ikTuneTorquePI(&(param->torqueControl), samplingInterval);
-    
+    ikTuneTorqueFromHubPitch(&(param->torqueFromHubPitchSlti), samplingInterval);
 }
 
 void ikTuneDrivetrainDamper(ikConLoopParams *params, double T) {
@@ -579,4 +579,42 @@ void ikTuneTorquePI(ikConLoopParams *params, double T) {
     params->linearController.postGainTfs.tfParams[0].a[1] = -1.0;
     params->linearController.postGainTfs.tfParams[0].a[2] = 0.0;
 
+}
+
+
+void ikTuneTorqueFromHubPitch(ikSlti *params, double T) {
+
+    /*! [Torque from Platform pitch] */
+    /*
+      ####################################################################
+      Torque PI
+
+      Transfer function:
+
+      C(s) = Kev/(s+Epsilon)
+
+      The sampling time is given by function parameter T.
+
+      Set parameters here:
+    */
+    const double Kev = 40; /* 40 kNm/(m/s) */
+    const double Epsilon = 0.0; /*   */
+    /*
+      ####################################################################
+    */
+    /*! [Torque from Platform pitch] */
+
+    /*
+      tune the torque from platform pitch to this tf:
+                    (T/2*z^(-1) + T/2)*Kev
+      C(z) = ---------------------------------------------
+             (Epsilon*T/2 - 1)*z^(-1) + (Epsilon*T/2 + 1)
+      rad/s --> kNm
+    */
+    params->a[0] = Epsilon * T / 2 + 1.0;
+    params->a[1] = Epsilon * T / 2 - 1.0;
+    params->a[2] = 0.0;
+    params->b[0] = T / 2 * Kev;
+    params->b[1] = T / 2 * Kev;
+    params->b[2] = 0.0;
 }

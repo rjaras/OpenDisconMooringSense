@@ -41,6 +41,10 @@ int ikSimpleWTCon_init(ikSimpleWTCon *self, const ikSimpleWTConParams *params) {
     /* pass reference to preferred torque for use in torque control */
     params_.torqueControl.setpointGenerator.preferredControlAction = &(self->priv.belowRatedTorque);
 
+    /* initialize torque from platform pitch lti system instance*/
+    ikSlti_init(&(self->priv.torqueFromHubPitchSlti));
+    ikSlti_setParam(&(self->priv.torqueFromHubPitchSlti), params_.torqueFromHubPitchSlti.a, params_.torqueFromHubPitchSlti.b);
+
     /* pass on the member parameters */
     err = ikConLoop_init(&(self->priv.dtdamper), &(params_.drivetrainDamper));
     if (err) return -1;
@@ -93,9 +97,20 @@ int ikSimpleWTCon_step(ikSimpleWTCon *self) {
 
     /* run torque control */
     self->priv.torqueFromTorqueCon = ikConLoop_step(&(self->priv.torquecon), self->in.maximumSpeed, self->in.generatorSpeed, self->priv.minTorque, self->priv.maxTorque);
+    
+    /* get torque related to nacelle nodding/pitch */
+    self->priv.torqueFromHubPitch = ikSlti_step(&(self->priv.torqueFromHubPitchSlti), self->in.nacellePitchAcceleration);
+    
+    /* Torque related to nacelle nodding/pitch limitation (limitted using percentage of torque control */
+    if (self->priv.torqueFromHubPitch > 0.15 * self->priv.torqueFromTorqueCon) {
+        self->priv.torqueFromHubPitch = 0.15 * self->priv.torqueFromTorqueCon;
+    }
+    if (self->priv.torqueFromHubPitch < -0.15 * self->priv.torqueFromTorqueCon) {
+        self->priv.torqueFromHubPitch = -0.15 * self->priv.torqueFromTorqueCon;
+    }
 
     /* calculate torque demand */
-    self->out.torqueDemand = self->priv.torqueFromDtdamper + self->priv.torqueFromTorqueCon;
+    self->out.torqueDemand = self->priv.torqueFromDtdamper + self->priv.torqueFromTorqueCon - self->priv.torqueFromHubPitch;
 
     /* run collective pitch control */
     self->out.pitchDemand = ikConLoop_step(&(self->priv.colpitchcon), self->in.maximumSpeed, self->in.generatorSpeed, self->priv.minPitch, self->priv.maxPitch);
@@ -139,6 +154,10 @@ int ikSimpleWTCon_getOutput(const ikSimpleWTCon *self, double *output, const cha
     if (!strcmp(name, "minimum pitch from power manager")) {
 	*output = self->priv.minPitchFromPowman;
 	return 0;
+    }
+    if (!strcmp(name, "torque from nacelle pitch")) {
+        *output = self->priv.torqueFromHubPitch;
+        return 0;
     }
 
     /* pick up the block names */

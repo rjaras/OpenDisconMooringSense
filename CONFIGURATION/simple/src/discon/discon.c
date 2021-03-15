@@ -43,6 +43,7 @@ void OpenDiscon_EXPORT DISCON(float *DATA, int FLAG, const char *INFILE, const c
     con.in.externalMinimumPitchRate = -2.5; /* deg/s */
     con.in.generatorSpeed = (double) DATA[19]; /* rad/s */
     con.in.maximumSpeed = 480.0/30*3.1416; /* rpm to rad/s */
+    con.in.nacellePitchAcceleration = (double) DATA[52]; /* rad/s2 */
         
     ikSimpleWTCon_step(&con);
         
