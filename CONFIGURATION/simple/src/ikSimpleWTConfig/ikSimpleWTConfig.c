@@ -215,8 +215,8 @@ void ikTuneGenSpeedPitchStrategy(ikPowmanParams* params, double T) {
     const double genSpeed[] = { 45.919427, 50.2656 }; /* rad/s */
     //const double pitch[] = { 0.00,  0.05236 }; /* rad -> 3deg*/
     //const double pitch[] = { 0.00,  0.10472 }; /* rad -> 6deg*/
-    const double pitch[] = { 0.00,  5.0 * 3.1416 / 180.0 }; /* rad -> 5deg*/
-    //const double pitch[] = { 0.00,  0.00 }; /* rad -> DEACTIVATED*/ 
+    //const double pitch[] = { 0.00,  5.0 * 3.1416 / 180.0 }; /* rad -> 5deg GOOD PERFORMANCE */ 
+    const double pitch[] = { 0.00,  0.00 }; /* rad -> DEACTIVATED*/ 
 
     // Minimum pitch maximum allowed rates
     const double minimumPitchGenSpeedMinRate = -0.01; /* deg/s */
