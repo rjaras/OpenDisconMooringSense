@@ -285,13 +285,9 @@ void ikTunePitchPIGainSchedule(ikConLoopParams *params) {
       Set parameters here:
     */
     const int n = 11; /* number of points in the lookup table */
-    //const double pitch[] = { 0.0,   3.8424, 5.6505, 8.1091, 11.6797, 14.5687, 17.1140, 19.4472, 21.6249, 23.6774, 25.000 }; /* degrees */
-    //const double gain[] = { 2.1000, 2.1000, 2.0727, 1.7182, 1.51820, 1.35450, 1.26360, 1.19090, 1.11820, 1.05450, 1.0545 }; /* - ORIGINAL ONSHORE GAINS */
-    //const double gain[] = { 1.2636, 1.0000, 1.0000, 1.0000, 1.0000, 1.26360, 1.26360, 1.19090, 1.11820, 1.05450, 1.0545 }; /* - REDUCED GAINS */
+    const double pitch[] = { 0.0,   3.8424, 5.6505, 8.1091, 11.6797, 14.5687, 17.1140, 19.4472, 21.6249, 23.6774, 25.000 }; /* degrees */
+    const double gain[] = { 2.1000, 2.1000, 2.0727, 1.7182, 1.51820, 1.35450, 1.26360, 1.19090, 1.11820, 1.05450, 1.0545 }; /* - ORIGINAL ONSHORE GAINS */
     
-    /* - SIMPLIFIED GAINS */
-    const double pitch[] = { 0.0,   25.0 }; /* degrees */
-    const double gain[] = { 1.0,  1.0 }; 
     /*
       ####################################################################
     */
