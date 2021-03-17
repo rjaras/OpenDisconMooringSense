@@ -67,7 +67,7 @@ extern "C" {
         ikConLoop dtdamper;
         ikConLoop torquecon;
         ikConLoop colpitchcon;
-        ikSlti torqueFromHubPitchSlti;
+        ikTfList torqueFromHubPitchTf;
         double maxPitch;
         double minPitch;
         double maxSpeed;
@@ -140,7 +140,7 @@ extern "C" {
         ikConLoopParams collectivePitchControl; /**<collective pitch control initialisation parameters*/
         ikTpmanParams torquePitchManager; /**<torque-pitch manager inintialisation parameters*/
         ikPowmanParams powerManager; /**<power manager initialisation parameters*/
-        ikSlti torqueFromHubPitchSlti; /**<torque value related to platform pitch lti system parameters*/
+        ikTfListParams torqueFromHubPitchTf; /**<torque value related to platform pitch transfer function parameters*/
     } ikSimpleWTConParams;
 
     /**

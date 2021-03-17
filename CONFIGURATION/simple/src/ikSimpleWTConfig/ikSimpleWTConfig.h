@@ -60,7 +60,7 @@ extern "C" {
 
     void ikTunePitchPIGainSchedule(ikConLoopParams *params);
 
-    void ikTuneTorqueFromHubPitch(ikSlti* params, double T);
+    void ikTuneTorqueFromHubPitch(ikTfListParams* params, double T);
 
 #ifdef __cplusplus
 }

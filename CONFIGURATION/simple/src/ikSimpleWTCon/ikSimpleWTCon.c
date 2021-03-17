@@ -41,10 +41,6 @@ int ikSimpleWTCon_init(ikSimpleWTCon *self, const ikSimpleWTConParams *params) {
     /* pass reference to preferred torque for use in torque control */
     params_.torqueControl.setpointGenerator.preferredControlAction = &(self->priv.belowRatedTorque);
 
-    /* initialize torque from platform pitch lti system instance*/
-    ikSlti_init(&(self->priv.torqueFromHubPitchSlti));
-    ikSlti_setParam(&(self->priv.torqueFromHubPitchSlti), params_.torqueFromHubPitchSlti.a, params_.torqueFromHubPitchSlti.b);
-
     /* pass on the member parameters */
     err = ikConLoop_init(&(self->priv.dtdamper), &(params_.drivetrainDamper));
     if (err) return -1;
@@ -56,6 +52,8 @@ int ikSimpleWTCon_init(ikSimpleWTCon *self, const ikSimpleWTConParams *params) {
     if (err) return -5;
     err = ikPowman_init(&(self->priv.powerManager), &(params_.powerManager));
     if (err) return -6;
+    err = ikTfList_init(&(self->priv.torqueFromHubPitchTf), &(params_.torqueFromHubPitchTf));
+    if (err) return -7;
     
     /* initialise feedback signals */
     self->priv.torqueFromTorqueCon = 0.0;
@@ -71,6 +69,7 @@ void ikSimpleWTCon_initParams(ikSimpleWTConParams *params) {
     ikConLoop_initParams(&(params->torqueControl));
     ikTpman_initParams(&(params->torquePitchManager));
     ikPowman_initParams(&(params->powerManager));
+    ikTfList_initParams(&(params->torqueFromHubPitchTf));
 }
 
 int ikSimpleWTCon_step(ikSimpleWTCon *self) {
@@ -99,9 +98,9 @@ int ikSimpleWTCon_step(ikSimpleWTCon *self) {
     self->priv.torqueFromTorqueCon = ikConLoop_step(&(self->priv.torquecon), self->in.maximumSpeed, self->in.generatorSpeed, self->priv.minTorque, self->priv.maxTorque);
     
     /* get torque related to nacelle nodding/pitch */
-    self->priv.torqueFromHubPitch = ikSlti_step(&(self->priv.torqueFromHubPitchSlti), self->in.nacellePitchAcceleration);
+    self->priv.torqueFromHubPitch = ikTfList_step(&(self->priv.torqueFromHubPitchTf), self->in.nacellePitchAcceleration);
     
-    /* Torque related to nacelle nodding/pitch limitation (limitted using percentage of torque control */
+    /* Torque related to nacelle nodding/pitch limitation (limitted using percentage of torque control)*/
     if (self->priv.torqueFromHubPitch > 0.15 * self->priv.torqueFromTorqueCon) {
         self->priv.torqueFromHubPitch = 0.15 * self->priv.torqueFromTorqueCon;
     }
