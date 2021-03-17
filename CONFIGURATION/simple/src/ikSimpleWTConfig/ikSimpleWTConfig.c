@@ -124,7 +124,7 @@ void ikTunePowerSettings(ikPowmanParams *params) {
       Set parameters here:
     */
     const double Pn = 10.0e3; /* kW */
-    const double eff = 0.94; /* - */
+    const double eff = 1; /* - */
     /*
       ####################################################################
     */
