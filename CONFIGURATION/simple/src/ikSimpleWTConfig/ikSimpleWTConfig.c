@@ -595,7 +595,7 @@ void ikTuneTorqueFromHubPitch(ikTfListParams *params, double T) {
     */
     const double Kev = 40; /* 40 kNm/(m/s) */
     
-    const double w1 = 2 * 3.1416 / 230; /* [rad/s] */
+    const double w1 = 2 * 3.1416 / 2300; /* [rad/s] */
     const double d1 = 0.5; /* [-] */
 
     const double w2 = 2 * 3.1416; /* [rad/s] */
