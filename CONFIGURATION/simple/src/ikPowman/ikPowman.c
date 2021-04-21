@@ -126,7 +126,7 @@ double ikPowman_step(ikPowman *self, double deratingRatio, double maxSpeed, doub
     }
 
     /* calculate minimum pitch (total) */
-    self->minimumPitch = max(minimumPitchDerating, minimumPitchGenSpeed);
+    self->minimumPitch = ((minimumPitchDerating > minimumPitchGenSpeed) ? minimumPitchDerating : minimumPitchGenSpeed);
 
     /* return the maximum torque */
     return self->maximumTorque;
