@@ -589,14 +589,14 @@ void ikTuneTorqueFromHubPitch(ikTfListParams *params, double T) {
 
       Transfer function:
 
-      H(s) = Kev * s/(s^2+2*d*w1*s+w1^2) * w2^2/(s^2 + 2*d*w2*s + w2^2)
+      H(s) = Kev * s^2 * s/(s^2+2*d*w1*s+w1^2) * w2^2/(s^2 + 2*d*w2*s + w2^2)
 
       The sampling time is given by function parameter T.
 
       Set parameters here:
     */
-    const double Kev = 40; /* 40 kNm/(m/s) */
-    
+    const double Kev = 4800; /* 4800 kNm/deg */
+
     const double w1 = 2 * 3.1416 / 2300; /* [rad/s] */
     const double d1 = 0.5; /* [-] */
 
@@ -609,29 +609,37 @@ void ikTuneTorqueFromHubPitch(ikTfListParams *params, double T) {
 
     /*
       tune the torque from platform pitch to this tf:
-										 T/2*(1-z^-2)											    		           (T/2*w2)^2*(z^-2 + 2*z^-1 + 1)
-      H(z) = Kev ----------------------------------------------------------------------------- ----------------------------------------------------------------------------- 
-                 (1-d1*T*w1+(w1*T/2)^2)*z^-2 + (2*(w1*T/2)^2-2)*z^-1 + (1+d1*T*w1+(w1*T/2)^2)   (1-d2*T*w2+(w2*T/2)^2)*z^-2 + (2*(w2*T/2)^2-2)*z^-1 + (1+d2*T*w2+(w2*T/2)^2)
+				  4/T^2*(z^-2-2*z^-1+1)						 T/2*(1-z^-2)											    		           (T/2*w2)^2*(z^-2 + 2*z^-1 + 1)
+      H(z) = Kev ----------------------- ----------------------------------------------------------------------------- ----------------------------------------------------------------------------- 
+                     (z^-2+2*z^-1+1)      (1-d1*T*w1+(w1*T/2)^2)*z^-2 + (2*(w1*T/2)^2-2)*z^-1 + (1+d1*T*w1+(w1*T/2)^2)  (1-d2*T*w2+(w2*T/2)^2)*z^-2 + (2*(w2*T/2)^2-2)*z^-1 + (1+d2*T*w2+(w2*T/2)^2)
     */
     params->tfParams[0].enable = 1;
     params->tfParams[0].b[0] = Kev;
     params->tfParams[0].a[0] = 1;
     
     params->tfParams[1].enable = 1;
-    params->tfParams[1].b[0] = T / 2;
-    params->tfParams[1].b[1] = 0.0;
-    params->tfParams[1].b[2] = -T / 2;
-    params->tfParams[1].a[0] = 1 + d1 * T * w1 + (w1 * T / 2) * (w1 * T / 2);
-    params->tfParams[1].a[1] = -2 + 2 * (w1 * T / 2) * (w1 * T / 2);
-    params->tfParams[1].a[2] = 1 - d1 * T * w1 + (w1 * T / 2) * (w1 * T / 2);
-        
+    params->tfParams[1].b[0] = 4 / (T * T);
+    params->tfParams[1].b[1] = -8 / (T * T);
+    params->tfParams[1].b[2] = 4 / (T * T);
+    params->tfParams[1].a[0] = 1;
+    params->tfParams[1].a[1] = 2;
+    params->tfParams[1].a[2] = 1;
+
     params->tfParams[2].enable = 1;
-    params->tfParams[2].b[0] = T * T / 4 * w2 * w2;
-    params->tfParams[2].b[1] = T * T / 2 * w2 * w2;
-    params->tfParams[2].b[2] = T * T / 4 * w2 * w2;
-    params->tfParams[2].a[0] = 1 + d2 * T * w2 + (w2 * T / 2) * (w2 * T / 2);
-    params->tfParams[2].a[1] = -2 + 2 * (w2 * T / 2) * (w2 * T / 2);
-    params->tfParams[2].a[2] = 1 - d2 * T * w2 + (w2 * T / 2) * (w2 * T / 2);    
+    params->tfParams[2].b[0] = T / 2;
+    params->tfParams[2].b[1] = 0.0;
+    params->tfParams[2].b[2] = -T / 2;
+    params->tfParams[2].a[0] = 1 + d1 * T * w1 + (w1 * T / 2) * (w1 * T / 2);
+    params->tfParams[2].a[1] = -2 + 2 * (w1 * T / 2) * (w1 * T / 2);
+    params->tfParams[2].a[2] = 1 - d1 * T * w1 + (w1 * T / 2) * (w1 * T / 2);
+
+    params->tfParams[3].enable = 1;
+    params->tfParams[3].b[0] = T * T / 4 * w2 * w2;
+    params->tfParams[3].b[1] = T * T / 2 * w2 * w2;
+    params->tfParams[3].b[2] = T * T / 4 * w2 * w2;
+    params->tfParams[3].a[0] = 1 + d2 * T * w2 + (w2 * T / 2) * (w2 * T / 2);
+    params->tfParams[3].a[1] = -2 + 2 * (w2 * T / 2) * (w2 * T / 2);
+    params->tfParams[3].a[2] = 1 - d2 * T * w2 + (w2 * T / 2) * (w2 * T / 2);
 }
 
 
