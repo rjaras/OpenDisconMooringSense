@@ -101,13 +101,9 @@ int ikSimpleWTCon_step(ikSimpleWTCon *self) {
     self->priv.torqueFromHubPitch = ikTfList_step(&(self->priv.torqueFromHubPitchTf), self->in.nacellePitchAcceleration);
     
     /* Torque related to nacelle nodding/pitch limitation (limitted using percentage of torque control)*/
-    if (self->priv.torqueFromHubPitch > 0.6 * self->priv.torqueFromTorqueCon) {
-        self->priv.torqueFromHubPitch = 0.6 * self->priv.torqueFromTorqueCon;
-    }
-    if (self->priv.torqueFromHubPitch < -0.6 * self->priv.torqueFromTorqueCon) {
-        self->priv.torqueFromHubPitch = -0.6 * self->priv.torqueFromTorqueCon;
-    }
-
+    self->priv.torqueFromHubPitch = self->priv.torqueFromHubPitch > 0.6 * self->priv.torqueFromTorqueCon ? 0.6 * self->priv.torqueFromTorqueCon : self->priv.torqueFromHubPitch;
+    self->priv.torqueFromHubPitch = self->priv.torqueFromHubPitch < -0.6 * self->priv.torqueFromTorqueCon ? -0.6 * self->priv.torqueFromTorqueCon : self->priv.torqueFromHubPitch;
+    
     /* calculate torque demand */
     self->out.torqueDemand = self->priv.torqueFromDtdamper + self->priv.torqueFromTorqueCon - self->priv.torqueFromHubPitch;
 

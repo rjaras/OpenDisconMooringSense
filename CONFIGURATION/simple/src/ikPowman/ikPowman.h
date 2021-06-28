@@ -103,10 +103,10 @@ extern "C" {
         int                 minimumPitchGenSpeedTableN; /**<number of points defining the generator speed - minimum pitch table. The default value is 1.*/
         double              minimumPitchGenSpeedTableX[IKLUTBL_MAXPOINTS]; /**<generator speeds defining the generator speed - minimum pitch table, non-dimensional. The default value is {0.0, 0.0, ...}*/
         double              minimumPitchGenSpeedTableY[IKLUTBL_MAXPOINTS]; /**<pitch angles defining the generator speed - minimum pitch table, in degrees. The default value is {0.0, 0.0, ...}*/
-        double              samplingInterval;
-        double              minimumPitchGenSpeedMaxRate;
-        double              minimumPitchGenSpeedMinRate;
-        ikTfListParams      generatorSpeedFilter;
+        double              samplingInterval; /**<sampling period for the controller execution, in s*/
+        double              minimumPitchGenSpeedMaxRate; /**<minimum pitch from platform-nacelle yaw difference maximum variation rate, in deg/s*/
+        double              minimumPitchGenSpeedMinRate; /**<minimum pitch from platform-nacelle yaw difference minimum variation rate, in deg/s*/
+        ikTfListParams      generatorSpeedFilter; /**<generator speed filtering transfer function*/
     } ikPowmanParams;
     
     /**

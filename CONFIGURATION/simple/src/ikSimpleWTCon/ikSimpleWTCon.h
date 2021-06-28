@@ -98,6 +98,7 @@ extern "C" {
      * @li external minimum pitch rate: externally set lower pitch rate limit, in degrees per second, specify via @link ikSimpleWTConInputs.externalMinimumPitchRate @endlink at @link in @endlink
      * @li maximum speed: maximum generator speed setpoint, in rad/s, specify via @link ikSimpleWTConInputs.maximumSpeed @endlink at @link in @endlink
      * @li generator speed: current generator speed, in rad/s, specify via @link ikSimpleWTConInputs.generatorSpeed @endlink at @link in @endlink
+     * @li nacelle pitch acceleration: current pitch/nodding acceleration, in rad/s^2, specify via @link ikSimpleWTConInputs.nacellePitchAcceleration @endlink at @link in @endlink
      * 
      * @par Outputs
      * @li torque demand: in kNm, get via @link ikSimpleWTConOutputs.torqueDemand @endlink at @link out @endlink
@@ -154,6 +155,7 @@ extern "C" {
      * @li -3: collective pitch control initialisation failed
      * @li -5: torque-pitch manager initialisation failed
      * @li -6: power manager initialisation failed
+     * @li -7: torque component from nacelle pitch transfer function initialisation failed
      */
     int ikSimpleWTCon_init(ikSimpleWTCon *self, const ikSimpleWTConParams *params);
 
