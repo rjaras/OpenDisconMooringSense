@@ -62,6 +62,8 @@ extern "C" {
 
     void ikTuneTorqueFromHubPitch(ikTfListParams* params, double T);
 
+    void ikChangeCoordinateSystem(float* x, float* y, float rotationAngle, float originDisplacement_x, float originDisplacement_y);
+
 #ifdef __cplusplus
 }
 #endif

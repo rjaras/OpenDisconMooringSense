@@ -25,6 +25,8 @@
 
 #include "ikSimpleWTConfig.h"
 
+#include <math.h>
+
 void setParams(ikSimpleWTConParams *param, double samplingInterval) {
     /*! [Sampling interval] */
     /*
@@ -630,4 +632,16 @@ void ikTuneTorqueFromHubPitch(ikTfListParams *params, double T) {
     params->tfParams[2].a[0] = 1 + d2 * T * w2 + (w2 * T / 2) * (w2 * T / 2);
     params->tfParams[2].a[1] = -2 + 2 * (w2 * T / 2) * (w2 * T / 2);
     params->tfParams[2].a[2] = 1 - d2 * T * w2 + (w2 * T / 2) * (w2 * T / 2);    
+}
+
+
+void ikChangeCoordinateSystem(float* x, float* y, float rotationAngle, float originDisplacement_x, float originDisplacement_y) {
+    double x_final;
+    double y_final;
+
+    x_final = *x * cos(rotationAngle) - *y * sin(rotationAngle) + originDisplacement_x;
+    y_final = *x * sin(rotationAngle) + *y * cos(rotationAngle) + originDisplacement_y;
+
+    *x = x_final;
+    *y = y_final;
 }
