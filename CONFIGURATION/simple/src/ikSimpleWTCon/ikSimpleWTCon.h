@@ -47,7 +47,7 @@ extern "C" {
         double externalMinimumPitchRate; /**<external minimum pitch rate in degrees per second*/
         double maximumSpeed; /**<maximum generator speed setpoing in rad/s*/
         double generatorSpeed; /**<generator speed in rad/s*/
-        double nacellePitchAcceleration; /**<nacelle pitch acceleration in rad/s2*/
+        double nacellePitch; /**<nacelle pitch in rad*/
     } ikSimpleWTConInputs;
 
     /**
@@ -98,7 +98,7 @@ extern "C" {
      * @li external minimum pitch rate: externally set lower pitch rate limit, in degrees per second, specify via @link ikSimpleWTConInputs.externalMinimumPitchRate @endlink at @link in @endlink
      * @li maximum speed: maximum generator speed setpoint, in rad/s, specify via @link ikSimpleWTConInputs.maximumSpeed @endlink at @link in @endlink
      * @li generator speed: current generator speed, in rad/s, specify via @link ikSimpleWTConInputs.generatorSpeed @endlink at @link in @endlink
-     * @li nacelle pitch acceleration: current pitch/nodding acceleration, in rad/s^2, specify via @link ikSimpleWTConInputs.nacellePitchAcceleration @endlink at @link in @endlink
+     * @li nacelle pitch: current nacelle pitch, in rad, specify via @link ikSimpleWTConInputs.nacellePitch @endlink at @link in @endlink
      * 
      * @par Outputs
      * @li torque demand: in kNm, get via @link ikSimpleWTConOutputs.torqueDemand @endlink at @link out @endlink

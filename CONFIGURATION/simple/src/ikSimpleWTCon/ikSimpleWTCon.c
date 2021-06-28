@@ -73,8 +73,6 @@ void ikSimpleWTCon_initParams(ikSimpleWTConParams *params) {
 }
 
 int ikSimpleWTCon_step(ikSimpleWTCon *self) {
-    int i;
-        
     /* run power manager */
     self->priv.maxTorqueFromPowman = ikPowman_step(&(self->priv.powerManager), 0.0, self->in.maximumSpeed, self->in.generatorSpeed);
     ikPowman_getOutput(&(self->priv.powerManager), &(self->priv.minPitchFromPowman), "minimum pitch");
@@ -98,7 +96,7 @@ int ikSimpleWTCon_step(ikSimpleWTCon *self) {
     self->priv.torqueFromTorqueCon = ikConLoop_step(&(self->priv.torquecon), self->in.maximumSpeed, self->in.generatorSpeed, self->priv.minTorque, self->priv.maxTorque);
     
     /* get torque related to nacelle nodding/pitch */
-    self->priv.torqueFromHubPitch = ikTfList_step(&(self->priv.torqueFromHubPitchTf), self->in.nacellePitchAcceleration);
+    self->priv.torqueFromHubPitch = ikTfList_step(&(self->priv.torqueFromHubPitchTf), self->in.nacellePitch);
     
     /* Torque related to nacelle nodding/pitch limitation (limitted using percentage of torque control)*/
     self->priv.torqueFromHubPitch = self->priv.torqueFromHubPitch > 0.6 * self->priv.torqueFromTorqueCon ? 0.6 * self->priv.torqueFromTorqueCon : self->priv.torqueFromHubPitch;
