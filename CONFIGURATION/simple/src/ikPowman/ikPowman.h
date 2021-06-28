@@ -83,7 +83,7 @@ extern "C" {
         double minimumPitchGenSpeedMaxRate;
         double minimumPitchGenSpeedMinRate;
         ikTfList generatorSpeedFilter;
-        double filteredSpeed;
+        double filteredGeneratorSpeed;
         /* @endcond */
     } ikPowman;
     

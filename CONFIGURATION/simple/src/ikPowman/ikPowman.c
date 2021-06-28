@@ -112,8 +112,8 @@ double ikPowman_step(ikPowman *self, double deratingRatio, double maxSpeed, doub
     double minimumPitchDerating = ikLutbl_eval(&(self->lutblPitchDerating), deratingRatio);
 
     /* calculate minimum pitch value caused by generator speed */
-    self->filteredSpeed = ikTfList_step(&(self->generatorSpeedFilter), measuredSpeed);
-    double newMinimumPitchGenSpeed = ikLutbl_eval(&(self->lutblPitchGenSpeed), self->filteredSpeed);
+    self->filteredGeneratorSpeed = ikTfList_step(&(self->generatorSpeedFilter), measuredSpeed);
+    double newMinimumPitchGenSpeed = ikLutbl_eval(&(self->lutblPitchGenSpeed), self->filteredGeneratorSpeed);
     double pitchChange = newMinimumPitchGenSpeed - minimumPitchGenSpeed;
     if (pitchChange > self->minimumPitchGenSpeedMaxRate * self->samplingInterval) {
         minimumPitchGenSpeed = minimumPitchGenSpeed + self->minimumPitchGenSpeedMaxRate * self->samplingInterval;
@@ -159,7 +159,7 @@ int ikPowman_getOutput(const ikPowman *self, double *output, const char *name) {
         return 0;
     }
     if (!strcmp(name, "filtered generator speed")) {
-        *output = self->filteredSpeed;
+        *output = self->filteredGeneratorSpeed;
         return 0;
     }
         
