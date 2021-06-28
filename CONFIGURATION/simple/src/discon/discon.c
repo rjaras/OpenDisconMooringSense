@@ -23,9 +23,8 @@
 #include "OpenDiscon_EXPORT.h"
 
 void OpenDiscon_EXPORT DISCON(float *DATA, int FLAG, const char *INFILE, const char *OUTNAME, char *MESSAGE) {
-    int err;
     static ikSimpleWTCon con;
-                
+
     if (NINT(DATA[0]) == 0) {
         const double samplingInterval = (double)DATA[2];
 
@@ -43,7 +42,7 @@ void OpenDiscon_EXPORT DISCON(float *DATA, int FLAG, const char *INFILE, const c
     con.in.externalMinimumPitchRate = -2.5; /* deg/s */
     con.in.generatorSpeed = (double) DATA[19]; /* rad/s */
     con.in.maximumSpeed = 480.0/30*3.1416; /* rpm to rad/s */
-    con.in.nacellePitchAcceleration = (double) DATA[52]; /* rad/s2 */
+    con.in.nacellePitchAcceleration = (double) DATA[82]; /* rad/s2 */
         
     ikSimpleWTCon_step(&con);
         
@@ -52,5 +51,4 @@ void OpenDiscon_EXPORT DISCON(float *DATA, int FLAG, const char *INFILE, const c
     DATA[42] = (float) (con.out.pitchDemand/180.0*3.1416); /* deg to rad */
     DATA[43] = (float) (con.out.pitchDemand/180.0*3.1416); /* deg to rad */
     DATA[44] = (float) (con.out.pitchDemand/180.0*3.1416); /* deg to rad (collective pitch angle) */
-
-}       
+}
