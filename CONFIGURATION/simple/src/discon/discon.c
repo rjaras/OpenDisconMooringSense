@@ -74,30 +74,18 @@ void OpenDiscon_EXPORT DISCON(float* DATA, int FLAG, const char* INFILE, const c
 
         fileHandler = fopen(INFILE, "r");
         err = fscanf(fileHandler, "%256[^\n]\n", ouputFile);
-        err = fscanf(fileHandler, "%d", &writeOutputFile);
-        err = fscanf(fileHandler, "%*[^\n]\n"); /* reading rest of the line */
-        err = fscanf(fileHandler, "%f", &platformInitialHeading);
-        err = fscanf(fileHandler, "%*[^\n]\n"); /* reading rest of the line */
-        err = fscanf(fileHandler, "%f", &nacelleInitialYaw);
-        err = fscanf(fileHandler, "%*[^\n]\n"); /* reading rest of the line */
-        err = fscanf(fileHandler, "%f", &windDirection);
-        err = fscanf(fileHandler, "%*[^\n]\n"); /* reading rest of the line */
-        err = fscanf(fileHandler, "%f", &platform_X_Global);
-        err = fscanf(fileHandler, "%*[^\n]\n"); /* reading rest of the line */
-        err = fscanf(fileHandler, "%f", &platform_Y_Global);
-        err = fscanf(fileHandler, "%*[^\n]\n"); /* reading rest of the line */
-        err = fscanf(fileHandler, "%f", &turbine_X_Local);
-        err = fscanf(fileHandler, "%*[^\n]\n"); /* reading rest of the line */
-        err = fscanf(fileHandler, "%f", &turbine_Y_Local);
-        err = fscanf(fileHandler, "%*[^\n]\n"); /* reading rest of the line */
-        err = fscanf(fileHandler, "%f", &nacelleRotorNode_X_Local);
-        err = fscanf(fileHandler, "%*[^\n]\n"); /* reading rest of the line */
-        err = fscanf(fileHandler, "%f", &nacelleRotorNode_Y_Local);
-        err = fscanf(fileHandler, "%*[^\n]\n"); /* reading rest of the line */
-        err = fscanf(fileHandler, "%f", &nacelleBackNode_X_Local);
-        err = fscanf(fileHandler, "%*[^\n]\n"); /* reading rest of the line */
-        err = fscanf(fileHandler, "%f", &nacelleBackNode_Y_Local);
-        err = fscanf(fileHandler, "%*[^\n]\n"); /* reading rest of the line */
+        err = fscanf(fileHandler, "%d%*[^\n]\n", &writeOutputFile);
+        err = fscanf(fileHandler, "%f%*[^\n]\n", &platformInitialHeading);
+        err = fscanf(fileHandler, "%f%*[^\n]\n", &nacelleInitialYaw);
+        err = fscanf(fileHandler, "%f%*[^\n]\n", &windDirection);
+        err = fscanf(fileHandler, "%f%*[^\n]\n", &platform_X_Global);
+        err = fscanf(fileHandler, "%f%*[^\n]\n", &platform_Y_Global);
+        err = fscanf(fileHandler, "%f%*[^\n]\n", &turbine_X_Local);
+        err = fscanf(fileHandler, "%f%*[^\n]\n", &turbine_Y_Local);
+        err = fscanf(fileHandler, "%f%*[^\n]\n", &nacelleRotorNode_X_Local);
+        err = fscanf(fileHandler, "%f%*[^\n]\n", &nacelleRotorNode_Y_Local);
+        err = fscanf(fileHandler, "%f%*[^\n]\n", &nacelleBackNode_X_Local);
+        err = fscanf(fileHandler, "%f%*[^\n]\n", &nacelleBackNode_Y_Local);
         fclose(fileHandler);
 
         platformInitialHeading = platformInitialHeading * (float)(3.1416 / 180.0); /* deg to rad */
