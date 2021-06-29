@@ -73,8 +73,6 @@ void ikSimpleWTCon_initParams(ikSimpleWTConParams *params) {
 }
 
 int ikSimpleWTCon_step(ikSimpleWTCon *self) {
-    int i;
-        
     /* run power manager */
     self->priv.maxTorqueFromPowman = ikPowman_step(&(self->priv.powerManager), 0.0, self->in.maximumSpeed, self->in.generatorSpeed);
     ikPowman_getOutput(&(self->priv.powerManager), &(self->priv.minPitchFromPowman), "minimum pitch");
