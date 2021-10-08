@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.0.0)
 project (OpenDiscon)
 
 # choose a configuration
-set( CONFIGURATION "CL-Windcon" CACHE STRING
+set( CONFIGURATION "simple" CACHE STRING
 "Choose a configuration.\n\
 Available configurations are:\n\
 simple\n\
