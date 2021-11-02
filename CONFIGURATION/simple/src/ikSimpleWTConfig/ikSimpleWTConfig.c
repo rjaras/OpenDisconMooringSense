@@ -610,26 +610,24 @@ void ikTuneTorqueFromHubPitch(ikTfListParams *params, double T) {
 
     /*
       tune the torque from platform pitch to this tf:
-				  4/T^2*(z^-2-2*z^-1+1)						 T/2*(1-z^-2)											    		           (T/2*w2)^2*(z^-2 + 2*z^-1 + 1)
-      H(z) = Kev ----------------------- ----------------------------------------------------------------------------- ----------------------------------------------------------------------------- 
-                     (z^-2+2*z^-1+1)      (1-d1*T*w1+(w1*T/2)^2)*z^-2 + (2*(w1*T/2)^2-2)*z^-1 + (1+d1*T*w1+(w1*T/2)^2)  (1-d2*T*w2+(w2*T/2)^2)*z^-2 + (2*(w2*T/2)^2-2)*z^-1 + (1+d2*T*w2+(w2*T/2)^2)
+				  2/T*(-z^-1 + 1)						(z^-2 - 2*z^-1 + 1)											    		           (T/2*w2)^2*(z^-2 + 2*z^-1 + 1)
+      H(z) = Kev ----------------- ----------------------------------------------------------------------------- ----------------------------------------------------------------------------- 
+                    (z^-1 + 1)      (1-d1*T*w1+(w1*T/2)^2)*z^-2 + (2*(w1*T/2)^2-2)*z^-1 + (1+d1*T*w1+(w1*T/2)^2)  (1-d2*T*w2+(w2*T/2)^2)*z^-2 + (2*(w2*T/2)^2-2)*z^-1 + (1+d2*T*w2+(w2*T/2)^2)
     */
     params->tfParams[0].enable = 1;
     params->tfParams[0].b[0] = Kev;
     params->tfParams[0].a[0] = 1;
     
     params->tfParams[1].enable = 1;
-    params->tfParams[1].b[0] = 4 / (T * T);
-    params->tfParams[1].b[1] = -8 / (T * T);
-    params->tfParams[1].b[2] = 4 / (T * T);
+    params->tfParams[1].b[0] = 2 / T;
+    params->tfParams[1].b[1] = -2 / T;
     params->tfParams[1].a[0] = 1;
-    params->tfParams[1].a[1] = 2;
-    params->tfParams[1].a[2] = 1;
+    params->tfParams[1].a[1] = 1;
 
     params->tfParams[2].enable = 1;
-    params->tfParams[2].b[0] = T / 2;
-    params->tfParams[2].b[1] = 0.0;
-    params->tfParams[2].b[2] = -T / 2;
+    params->tfParams[2].b[0] = 1;
+    params->tfParams[2].b[1] = -2;
+    params->tfParams[2].b[2] = 1;
     params->tfParams[2].a[0] = 1 + d1 * T * w1 + (w1 * T / 2) * (w1 * T / 2);
     params->tfParams[2].a[1] = -2 + 2 * (w1 * T / 2) * (w1 * T / 2);
     params->tfParams[2].a[2] = 1 - d1 * T * w1 + (w1 * T / 2) * (w1 * T / 2);
