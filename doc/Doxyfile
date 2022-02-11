@@ -866,7 +866,7 @@ WARN_LOGFILE           =
 
 INPUT                  = ../OpenWitcon/src \
                          ./ \
-                         ../CONFIGURATION/CL-Windcon/src \
+                         ../CONFIGURATION/MooringSense/src \
                          ../CONFIGURATION/simple/src
 
 # This tag can be used to specify the character encoding of the source files
@@ -985,7 +985,7 @@ EXCLUDE_SYMBOLS        =
 # that contain example code fragments that are included (see the \include
 # command).
 
-EXAMPLE_PATH           = ../CONFIGURATION/CL-Windcon/src \
+EXAMPLE_PATH           = ../CONFIGURATION/MooringSense/src \
                          ../CONFIGURATION/simple/src
 
 # If the value of the EXAMPLE_PATH tag contains directories, you can use the

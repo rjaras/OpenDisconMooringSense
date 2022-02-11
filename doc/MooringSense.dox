@@ -1,0 +1,37 @@
+/*
+Copyright (C) 2017, 2021-2022 IKERLAN
+
+This file is part of OpenDiscon.
+ 
+OpenDiscon is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+ 
+OpenDiscon is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+ 
+You should have received a copy of the GNU General Public License
+along with OpenDiscon. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/** @page mooringsense MooringSense
+*
+* <table style="border:none;">
+* <tr><td>
+* \htmlonly <style>div.image img[src="eu_emblem.jpg"]{width:100px;}</style> \endhtmlonly 
+* @image html eu_emblem.jpg
+* </td>
+* <td>
+* This project has received funding from the European Union’s Horizon 2020 research and
+* innovation programme under grant agreement No 851703
+* </td>
+* </tr>
+* </table>
+*
+* OpenDiscon caters to the needs of H2020 project MooringSense, by providing a controller specifically
+* tuned for compatibility with the DTU 10 MW reference wind turbine model.
+*
+*/

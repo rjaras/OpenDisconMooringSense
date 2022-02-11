@@ -33,6 +33,7 @@ along with OpenDiscon. If not, see <http://www.gnu.org/licenses/>.
 * - CONFIGURATION
 *  - simple: a simple wind turbine controller, initially tuned for the DTU 10MW Reference Turbine (see CL-Windcon for details on how to tune it for some other turbine)
 *  - CL-Windcon: a controller for @ref clwindcon
+*  - MooringSense: a controller for @ref mooringsense
 * - DISTRIBUTION
 *  - DISCON: an implementation of the legacy GHBladed DISCON interface, which is also used by other wind turbine simulation software packages such as FAST.
 *  - S-Function: a Simulink block implementation.
