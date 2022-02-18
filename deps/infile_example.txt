@@ -1,0 +1,17 @@
+C:\\MOORING_SENSE\\SimulationResults\\1_HMG_IkThrustLimiter.bin
+1		--    Save output flag (0: No, Other value: Yes)
+235.0		--    Initial heading (in degrees)
+-25.0		--    Initial nacelle yaw (in degrees)
+210.0		--    Wind direction (in degrees)
+-70.66		--    Platform reference system X coordinate in GLOBAL system
+0		--    Platform reference system Y coordinate in GLOBAL system
+70.66		--    Turbine reference system X coordinate in parent system
+0		--    Turbine reference system Y coordinate in parent system
+2.637		--    Nacelle point 1 (closer to the rotor, nacBack in SIMA) X coordinate in local system
+0		--    Nacelle point 1 (closer to the rotor, nacBack in SIMA) Y coordinate in local system
+2.737		--    Nacelle point 2 (nacFront in SIMA) X coordinate in local system
+0		--    Nacelle point 2 (nacFront in SIMA) Y coordinate in local system
+C:\\MOORING_SENSE\\ControllerInputs\\surfacesFiles\\cplambda3.bin
+C:\\MOORING_SENSE\\ControllerInputs\\surfacesFiles\\ctlambda2.bin
+C:\\MOORING_SENSE\\ControllerInputs\\surfacesFiles\\thrustLimitSurface.bin
+C:\\MOORING_SENSE\\SimulationResults\\1_HMG_IkThrustLimiter.txt
