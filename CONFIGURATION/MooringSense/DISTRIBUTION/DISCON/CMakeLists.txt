@@ -6,7 +6,7 @@ include_directories ("${OPENWITCON_INCLUDE_DIRS}")
 include_directories ("${PROJECT_BINARY_DIR}")
 include (GenerateExportHeader)
 add_library (OpenDiscon SHARED ${OPENDISCON_SOURCES})
-#target_link_libraries (OpenDiscon ${PROJECT_SOURCE_DIR}/TnoObserver/DISCONOBS.dll)
+target_link_libraries (OpenDiscon ${PROJECT_SOURCE_DIR}/deps/TnoObserver/DISCONOBS.dll)
 GENERATE_EXPORT_HEADER (OpenDiscon
 	BASE_NAME OpenDiscon
 	EXPORT_MACRO_NAME OpenDiscon_EXPORT

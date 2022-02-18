@@ -27,16 +27,16 @@
 #include <math.h>
 #include <string.h>
 
-/*
+
 // TNO observer defines
 # define OBSFUN DISCONOBS
 typedef float BFP; /* 32 bit, floating */
-/*
+
 extern void OBSFUN(
     float* bl_avrSwap, int* bl_aviFail,
     const char* bl_accInfile, const char* bl_avcOutname,
     char* bl_avcMsg);
-*/
+
 
 void OpenDiscon_EXPORT DISCON(float* DATA, int FLAG, const char* INFILE, const char* OUTNAME, char* MESSAGE) {
     int err;
@@ -72,13 +72,13 @@ void OpenDiscon_EXPORT DISCON(float* DATA, int FLAG, const char* INFILE, const c
     static float nacelleBackNode_X0;
     static float nacelleBackNode_Y0;
 
-    /* TNO observer required variables 
+    /* TNO observer required variables  */
     BFP avrSwap[256]; // not all Bladed defined records are actually used
     int aviFail;
     const char *accInfile = "DISCON.IN";
     const char *avcOutname = "loadcase";
     char avcMsg[255]; // number in brackets is the max. message length!
-    int loop; */
+    int loop;
     double estimatedThrust = 0.0; // Estimated thrust force
 
     if (NINT(DATA[0]) == 0) {
@@ -138,14 +138,14 @@ void OpenDiscon_EXPORT DISCON(float* DATA, int FLAG, const char* INFILE, const c
         nacelleBackNode_Y0 = nacelleBackNode_Y_Local;
     }
 
-    /* Calling TNO observer
+    /* Calling TNO observer */
     // copy avrSwap = DATA
     for (loop = 0; loop < 256; loop++) { avrSwap[loop] = DATA[loop]; }
     avrSwap[49] = (float) strlen(accInfile); // No. of characters in the 'INFILE' argument ("DISCON.IN")
     avrSwap[50] = (float) strlen(avcOutname); // No. of characters in the 'OUTNAME' argument
     avrSwap[14] = (float) (avrSwap[14] * 1.0e3); // kW to W
     OBSFUN(avrSwap, &aviFail, accInfile, avcOutname, avcMsg);
-    estimatedThrust = avrSwap[129]; */
+    estimatedThrust = avrSwap[129];
     
     /* Compute input parameters */
     platformAbsoluteYaw = (double)DATA[122] + (double)platformInitialHeading; /* Platform yaw [rad] */
